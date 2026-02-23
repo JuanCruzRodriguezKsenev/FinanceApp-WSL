@@ -1,0 +1,35 @@
+.alert {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.content {
+  font-size: 0.875rem;
+}
+
+.success {
+  background-color: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-text);
+}
+
+.error {
+  background-color: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error-text);
+}
+
+.details {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+  opacity: 0.8;
+}

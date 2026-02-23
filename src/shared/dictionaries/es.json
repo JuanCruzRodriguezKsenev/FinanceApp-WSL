@@ -1,0 +1,48 @@
+{
+  "transactions": {
+    "title": "💸 Finance App 3.0",
+    "subtitle": "Demostración: Zod + Circuit Breaker + Result Pattern",
+    "amountLabel": "Monto ($)",
+    "amountPlaceholder": "Ej: 1500",
+    "cbuLabel": "CBU Destino",
+    "cbuPlaceholder": "Ej: 0123456789012345678912",
+    "descriptionLabel": "Descripción (Opcional)",
+    "descriptionPlaceholder": "Ej: Pago de alquiler",
+    "submitButton": "Transferir",
+    "processingButton": "Procesando de forma segura...",
+    "successMessage": "¡Éxito! Transacción creada con ID",
+    "errorMessage": "Error al procesar. Revisa los detalles abajo.",
+    "errorTitle": "Error",
+    "errorFieldAffected": "Campo afectado",
+    "successCardTitle": "Transacción Exitosa",
+    "amountRequired": "El monto es requerido",
+    "amountPositive": "El monto debe ser positivo",
+    "amountMax": "El monto no puede superar 1,000,000",
+    "cbuRequired": "El CBU es requerido",
+    "cbuLength": "El CBU debe tener exactamente 22 números",
+    "cbuNumbers": "El CBU solo puede contener números",
+    "descMax": "La descripción es muy larga"
+  },
+  "bankAccounts": {
+    "title": "Cuentas Bancarias",
+    "cbuLabel": "CBU",
+    "aliasLabel": "Alias",
+    "bankNameLabel": "Nombre del Banco",
+    "submitButton": "Agregar Cuenta",
+    "successMessage": "Cuenta bancaria agregada exitosamente",
+    "errorMessage": "Error al agregar la cuenta bancaria"
+  },
+  "digitalWallets": {
+    "title": "Billeteras Digitales",
+    "cvuLabel": "CVU",
+    "providerLabel": "Proveedor",
+    "submitButton": "Vincular Billetera",
+    "successMessage": "Billetera vinculada exitosamente",
+    "errorMessage": "Error al vincular la billetera"
+  },
+  "language": {
+    "switch": "Cambiar idioma",
+    "es": "Español",
+    "en": "English"
+  }
+}

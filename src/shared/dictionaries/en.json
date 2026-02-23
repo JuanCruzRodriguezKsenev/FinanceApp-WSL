@@ -1,0 +1,48 @@
+{
+  "transactions": {
+    "title": "💸 Finance App 3.0",
+    "subtitle": "Showcase: Zod + Circuit Breaker + Result Pattern",
+    "amountLabel": "Amount ($)",
+    "amountPlaceholder": "Ex: 1500",
+    "cbuLabel": "Destination Routing Number (CBU)",
+    "cbuPlaceholder": "Ex: 0123456789012345678912",
+    "descriptionLabel": "Description (Optional)",
+    "descriptionPlaceholder": "Ex: Rent payment",
+    "submitButton": "Transfer",
+    "processingButton": "Processing securely...",
+    "successMessage": "Success! Transaction created with ID",
+    "errorMessage": "Processing error. Check details below.",
+    "errorTitle": "Error",
+    "errorFieldAffected": "Affected field",
+    "successCardTitle": "Successful Transaction",
+    "amountRequired": "Amount is required",
+    "amountPositive": "Amount must be positive",
+    "amountMax": "Amount cannot exceed 1,000,000",
+    "cbuRequired": "CBU is required",
+    "cbuLength": "CBU must be exactly 22 numbers",
+    "cbuNumbers": "CBU must only contain numbers",
+    "descMax": "Description is too long"
+  },
+  "bankAccounts": {
+    "title": "Bank Accounts",
+    "cbuLabel": "Routing Number (CBU)",
+    "aliasLabel": "Alias",
+    "bankNameLabel": "Bank Name",
+    "submitButton": "Add Account",
+    "successMessage": "Bank account added successfully",
+    "errorMessage": "Error adding bank account"
+  },
+  "digitalWallets": {
+    "title": "Digital Wallets",
+    "cvuLabel": "Routing Number (CVU)",
+    "providerLabel": "Provider",
+    "submitButton": "Link Wallet",
+    "successMessage": "Wallet linked successfully",
+    "errorMessage": "Error linking wallet"
+  },
+  "language": {
+    "switch": "Switch language",
+    "es": "Español",
+    "en": "English"
+  }
+}
