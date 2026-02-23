@@ -25,6 +25,8 @@ export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
 }
 
+import { ThemeProvider } from "@/contexts";
+
 // Para inyectar el tema correctamente necesitamos leer la cookie que pre-renderiza Next.js
 export default async function RootLayout({
   children,
@@ -49,7 +51,9 @@ export default async function RootLayout({
   return (
     <html lang={lang} data-theme={theme.mode} data-color={theme.color}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

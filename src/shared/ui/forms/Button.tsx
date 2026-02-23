@@ -1,44 +1,57 @@
-import React from 'react';
-import { useFormStatus } from 'react-dom';
-import styles from './forms.module.css';
+"use client";
+
+import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ButtonVariant } from "./button.types";
+import styles from "./Button.module.css";
+
 
 /**
- * Props for the Button component.
+ * Props para el componente Button
+ * @property variant - Estilo visual del botón (default: "primary")
+ * @property isLoading - Muestra estado de carga (default: false)
+ * @property children - Contenido del botón
  */
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Visual style variant */
-  variant?: 'primary' | 'secondary' | 'error';
-  /** Manual loading state. If not provided, it will automatically use useFormStatus() pending state. */
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  variant?: ButtonVariant;
   isLoading?: boolean;
 }
 
 /**
- * A semantic Button component with integrated React 19 form status awareness.
+ * Componente Button reutilizable con múltiples variantes.
+ *
+ * @component
+ * @returns JSX.Element
+ *
+ * @example
+ * <Button variant="primary" onClick={handleClick}>
+ *   Click me
+ * </Button>
  */
-export function Button({ 
-  variant = 'primary', 
-  isLoading, 
-  children, 
-  className = '', 
+export default function Button({
+  children,
+  variant = "primary",
+  isLoading = false,
+  className = "",
   disabled,
-  ...props 
+  ...props
 }: ButtonProps) {
-  const { pending } = useFormStatus();
-  const loading = isLoading || pending;
-
-  const classes = [
-    styles.button,
-    styles[variant],
-    className
-  ].filter(Boolean).join(' ');
-
   return (
-    <button 
-      className={classes} 
-      disabled={disabled || loading} 
+    <button
+      className={`${styles.btn} ${styles[variant]} ${className}`}
+      disabled={isLoading || disabled}
+
+      aria-busy={isLoading}
+      aria-disabled={isLoading || disabled}
       {...props}
     >
-      {loading ? '...' : children}
+      {isLoading ? (
+        <span className={styles.loader} aria-label="Loading">
+          ...
+        </span>
+      ) : (
+        children
+      )}
     </button>
   );
 }

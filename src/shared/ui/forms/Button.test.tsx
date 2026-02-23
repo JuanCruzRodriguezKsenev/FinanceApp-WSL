@@ -28,7 +28,7 @@ describe('Button Component', () => {
     vi.mocked(reactDom.useFormStatus).mockReturnValue({ 
       pending: true, 
       data: new FormData(), 
-      action: null, 
+      action: '', 
       method: 'post' 
     });
     

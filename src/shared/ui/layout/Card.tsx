@@ -1,13 +1,31 @@
-import React from 'react';
-import styles from './layout.module.css';
+import { CSSProperties, ReactNode } from "react";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+import styles from "./Card.module.css";
+
+interface CardProps {
+  children: ReactNode;
+  className?: string;
+  onClick?: () => void;
+  interactive?: boolean; // Activa hover y cursor pointer
+  variant?: "default" | "success" | "danger" | "warning" | "info";
+  style?: CSSProperties;
 }
 
-export function Card({ children, className = '', ...props }: CardProps) {
+export default function Card({
+  children,
+  className = "",
+  onClick,
+  interactive = false,
+  variant = "default",
+  style,
+}: CardProps) {
   return (
-    <div className={`${styles.card} ${className}`} {...props}>
+    <div
+      className={`${styles.card} ${styles[variant]} ${interactive ? styles.interactive : ""} ${className}`}
+      onClick={onClick}
+
+      style={style}
+    >
       {children}
     </div>
   );

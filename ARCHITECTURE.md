@@ -86,11 +86,12 @@ Serverless environments (Vercel) reset memory on cold starts.
 - **Mechanism:** Atomic `GET/SET` operations to maintain failure counters and `nextAttempt` timestamps.
 - **Fallback:** Silent "In-Memory" fallback for local development without `.env` credentials.
 
-### 3. Styling Paradigm: Semantic CSS & Composition
-We explicitly **reject Tailwind/Utility-first CSS** to prevent markup bloat and maintain a strict design system.
-- **Technology:** CSS Modules + CSS Variables.
+### 3. Styling Paradigm: Semantic UI Library & Composition
+We explicitly **reject Tailwind/Utility-first CSS** to prevent markup bloat and maintain a strict design system. Our UI library is designed to be **fully portable**.
+- **Technology:** CSS Modules + CSS Variables (Design Tokens).
 - **Composition:** Extensive use of `composes` to share styles without duplicating declarations.
-- **Layout Components:** `<Flex>`, `<Container>`, and `<Card>` enforce spatial consistency without utility classes.
+- **Layout Components:** `<Flex>`, `<Container>`, and `<Card>` enforce spatial consistency.
+- **Mediator Pattern:** Complex UI interactions (like Dialogs) use a Mediator to decouple the trigger, the container, and the content.
 
 ---
 
@@ -100,35 +101,18 @@ We explicitly **reject Tailwind/Utility-first CSS** to prevent markup bloat and 
 src/
   app/                      # Next.js App Router
     [lang]/                 # 🌍 i18n Dynamic Route Segment
-      page.tsx              # (e.g. /es/..., /en/...)
-      layout.tsx
   features/                 # Bounded Contexts / Vertical Slices
-    transactions/
-      actions/              # Server Actions (Mutations & Queries)
-      components/           # UI specific to transactions
-      schemas/              # Zod schemas for the domain
-      types/                # Local types
-      index.ts              # Public API of the feature
-    bank-accounts/
-      actions/
-      components/
-      schemas/
-    digital-wallets/
-      actions/              # Double Circuit Breaker (API + DB)
-      components/
+    transactions/           # Logic, UI, and Schemas for Transactions
   shared/                   # Cross-cutting concerns & global utilities
-    dictionaries/           # 🌍 i18n JSON translation files
-    lib/
-      i18n/                 # 🌍 getDictionary() and i18n configs
-      circuit-breaker/      # State machine and Redis adapters
-      result/               # Functional Result Pattern
-      validators/           # Zod-to-Result wrappers
-      logger/               # Pino configuration with PII Masking
-    ui/                     # Generic Semantic UI Components (Atomic)
-    hooks/                  # Global hooks (useAction, useFormAction)
-    constants/              # Global constants (Theme, etc.)
-  middleware.ts             # 🌍 Content negotiation & Locale redirect
+    ui/                     # 🎨 Portable Semantic UI Library (Pure Atomics)
+      forms/                # Button, Input, Select (Semantic)
+      layout/               # Card, Flex, Navbar (Compositional)
+      feedback/             # Dialog, Alert (Mediator Pattern)
+      display/              # Table, Badge (Data-driven)
+    hooks/                  # React 19 optimized hooks (useFormAction)
+    contexts/               # Global state (ThemeContext)
 ```
+
 
 ---
 
@@ -298,9 +282,11 @@ DB Query (Recovering)   HALF_OPEN       50%             ~18ms (Probing)
 - [x] Functional Result Pattern (POJOs, mapResult helpers)
 - [x] Validation Engine (Zod wrapper -> Result mapped)
 - [x] Circuit Breaker (Redis-backed state machine)
-- [x] UI Library (Flex, Card, Button, Input, Alert)
-- [x] React 19 Integration (useFormAction, useFormStatus)
+- [x] Portable Semantic UI Library (Flex, Card, Button, Input, Table)
+- [x] Mediator Pattern Implementation (Dialog System)
+- [x] React 19 Native Integration (useFormAction, useFormStatus)
 - [x] PII Masking & Pino Structured Logging
+- [x] Global Theme System (Light/Dark/System)
 
 **Features Migrated (Vertical Slices):**
 - [x] Transactions (actions, schemas, UI testing)

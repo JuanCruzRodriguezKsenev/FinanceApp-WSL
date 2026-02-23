@@ -1,102 +1,74 @@
 "use client";
 
-import { useState } from "react";
 import { createTransaction } from "../actions";
-import { useAction } from "../../../shared/hooks/useAction";
-import { Flex, Card, Button, Input, Label, Alert } from "../../../shared/ui";
+import { useFormAction } from "../../../shared/hooks/useFormAction";
+import { Card, Button, Input, Alert, Flex } from "../../../shared/ui";
 
 export function TransactionForm({ dict }: { dict: Record<string, string> }) {
-  const [formData, setFormData] = useState({ amount: "", cbu: "", description: "" });
-  const [statusMessage, setStatusMessage] = useState("");
-
-  const { execute, isExecuting, data, error } = useAction(createTransaction, {
-    onSuccess: (data) => {
-      setStatusMessage(`${dict.successMessage}: ${data.id}`);
-      setFormData({ amount: "", cbu: "", description: "" }); // Reset
-    },
-    onError: () => {
-      setStatusMessage(dict.errorMessage);
+  const { formAction, isPending, state } = useFormAction(createTransaction, {
+    onSuccess: () => {
+      // Opcional: limpiar campos o mostrar notificación persistente
     }
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const input = {
-      ...formData,
-      amount: formData.amount ? Number(formData.amount) : undefined,
-    };
-    execute(input);
-  };
-
   return (
     <Card>
-      <form onSubmit={handleSubmit}>
+      <form action={formAction}>
         <Flex direction="column" gap={4}>
-          <div>
-            <Label htmlFor="amount">{dict.amountLabel}</Label>
-            <Input 
-              id="amount"
-              type="number"
-              value={formData.amount}
-              onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
-              placeholder={dict.amountPlaceholder}
-            />
-          </div>
+          <Input 
+            id="amount"
+            name="amount"
+            type="number"
+            label={dict.amountLabel}
+            placeholder={dict.amountPlaceholder}
+            error={state?.isErr && state.error.field === "amount" ? state.error.message : undefined}
+            required
+          />
 
-          <div>
-            <Label htmlFor="cbu">{dict.cbuLabel}</Label>
-            <Input 
-              id="cbu"
-              type="text"
-              value={formData.cbu}
-              onChange={(e) => setFormData(prev => ({ ...prev, cbu: e.target.value }))}
-              placeholder={dict.cbuPlaceholder}
-            />
-          </div>
+          <Input 
+            id="cbu"
+            name="cbu"
+            type="text"
+            label={dict.cbuLabel}
+            placeholder={dict.cbuPlaceholder}
+            error={state?.isErr && state.error.field === "cbu" ? state.error.message : undefined}
+            required
+          />
 
-          <div>
-            <Label htmlFor="description">{dict.descriptionLabel}</Label>
-            <Input 
-              id="description"
-              type="text"
-              value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              placeholder={dict.descriptionPlaceholder}
-            />
-          </div>
+          <Input 
+            id="description"
+            name="description"
+            type="text"
+            label={dict.descriptionLabel}
+            placeholder={dict.descriptionPlaceholder}
+            error={state?.isErr && state.error.field === "description" ? state.error.message : undefined}
+          />
 
           <Button 
             type="submit" 
-            isLoading={isExecuting}
+            isLoading={isPending}
           >
-            {isExecuting ? dict.processingButton : dict.submitButton}
+            {isPending ? dict.processingButton : dict.submitButton}
           </Button>
         </Flex>
       </form>
 
       {/* RESULTADOS O ERRORES */}
       <div style={{ marginTop: "30px" }}>
-        {statusMessage && !error && !data && <p style={{ fontWeight: "bold" }}>{statusMessage}</p>}
-
-        {error && (
+        {state?.isErr && (
           <Alert 
             type="error" 
-            title={`⚠️ ${dict.errorTitle} (${error.type})`}
-            details={error.details?.circuitStatus ? `CIRCUIT_BREAKER_STATE: ${error.details.circuitStatus}` : undefined}
+            title={`⚠️ ${dict.errorTitle} (${state.error.type})`}
+            details={state.error.details?.circuitStatus ? `CIRCUIT_BREAKER_STATE: ${state.error.details.circuitStatus}` : undefined}
           >
-            <p>{error.message}</p>
-            {error.type === "VALIDATION_ERROR" && error.field && (
-              <small style={{ display: "block", marginTop: "10px" }}>
-                {dict.errorFieldAffected}: <b>{error.field}</b>
-              </small>
-            )}
+            <p>{state.error.message}</p>
           </Alert>
         )}
         
-        {data && (
+        {state?.isOk && (
           <Alert type="success" title={`✅ ${dict.successCardTitle}`}>
             <pre style={{ margin: 0, fontSize: "0.8em", overflowX: "auto" }}>
-              {JSON.stringify(data, null, 2)}
+              {JSON.stringify(state.value, null, 2)}
             </pre>
           </Alert>
         )}
