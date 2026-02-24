@@ -20,29 +20,42 @@ export function ThemeProvider({ children, initialTheme = "system" }: ThemeProvid
   const [theme, setThemeState] = useState<Theme>(initialTheme);
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
-  // Sincronizar con localStorage después del montaje
+  // Cargar preferencia guardada SOLO al montar
   useEffect(() => {
     const saved = localStorage.getItem("theme") as Theme | null;
-    if (saved && saved !== theme) {
+    if (saved) {
       setThemeState(saved);
     }
-  }, [theme]);
+  }, []);
 
   useEffect(() => {
     const root = window.document.documentElement;
-    let effectiveTheme: "light" | "dark" = "light";
+    
+    const updateTheme = () => {
+      let effectiveTheme: "light" | "dark" = "light";
 
+      if (theme === "system") {
+        effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      } else {
+        effectiveTheme = theme as "light" | "dark";
+      }
+
+      setResolvedTheme(effectiveTheme);
+      root.setAttribute("data-theme", effectiveTheme);
+      localStorage.setItem("theme", theme);
+    };
+
+    updateTheme();
+
+    // Escuchar cambios en el esquema de color del sistema si el modo es 'system'
     if (theme === "system") {
-      effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-    } else {
-      effectiveTheme = theme as "light" | "dark";
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handler = () => updateTheme();
+      mediaQuery.addEventListener("change", handler);
+      return () => mediaQuery.removeEventListener("change", handler);
     }
-
-    setResolvedTheme(effectiveTheme);
-    root.setAttribute("data-theme", effectiveTheme);
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
