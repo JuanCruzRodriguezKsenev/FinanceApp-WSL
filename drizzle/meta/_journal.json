@@ -15,6 +15,13 @@
       "when": 1771883295830,
       "tag": "0001_daffy_imperial_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771903104352,
+      "tag": "0002_confused_nocturne",
+      "breakpoints": true
     }
   ]
 }

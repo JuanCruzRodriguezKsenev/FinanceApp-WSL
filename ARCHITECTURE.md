@@ -11,6 +11,7 @@ Following the exhaustive technical audit (Feb 2026), these mandates are implemen
 5.  **Validation Strategy**: Use **Zod** exclusively. No custom regex-based validators for standard fields.
 6.  **I18n Strategy**: Use Server-Side dictionaries with dynamic routing `/[lang]`. Zero client bundle bloat for translations.
 7.  **React 19 Native**: Leverage `useActionState` and `useFormStatus` to handle asynchronous states natively.
+8.  **ACID Compliance**: All multi-step data operations (Transfers, Reserves) **must** use database transactions via `db.transaction()` to ensure atomicity and consistency.
 
 ---
 
@@ -287,6 +288,7 @@ DB Query (Recovering)   HALF_OPEN       50%             ~18ms (Probing)
 - [x] React 19 Native Integration (useFormAction, useFormStatus)
 - [x] PII Masking & Pino Structured Logging
 - [x] Global Theme System (Light/Dark/System)
+- [ ] ACID Compliance (Atomic Transactions, Strict Constraints)
 
 **Features Migrated (Vertical Slices):**
 - [x] Transactions (actions, schemas, UI testing)

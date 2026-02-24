@@ -10,8 +10,19 @@ export async function TransactionList({ dict }: { dict: Dictionary["transactions
   }
 
   const columns = [
-    { key: "amount" as const, label: dict.tableAmount, render: (val: string) => `$${val}` },
-    { key: "cbu" as const, label: dict.tableCbu },
+    { key: "amount" as const, label: dict.tableAmount, render: (val: string, item: any) => `${item.currency === 'USD' ? 'u$s' : '$'}${val}` },
+    { 
+      key: "cbu" as const, 
+      label: dict.tableCbu,
+      render: (val: string, item: any) => (
+        <div>
+          {item.contact ? (
+            <div style={{ fontWeight: 'bold' }}>{item.contact.name}</div>
+          ) : null}
+          <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>{val}</div>
+        </div>
+      )
+    },
     { 
       key: "status" as const, 
       label: dict.tableStatus, 

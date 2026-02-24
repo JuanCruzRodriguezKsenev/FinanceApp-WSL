@@ -11,7 +11,8 @@ import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
 import { transactions } from "../schema.db";
-import { desc } from "drizzle-orm";
+import { contacts } from "../../contacts/schema.db";
+import { desc, eq, sql } from "drizzle-orm";
 
 // Obtenemos una instancia global del Circuit Breaker para la Base de Datos
 const dbBreaker = CircuitBreakerFactory.database("main-db");
@@ -19,7 +20,12 @@ const dbBreaker = CircuitBreakerFactory.database("main-db");
 export async function getTransactions(): Promise<Result<any[]>> {
   try {
     const result = await dbBreaker.execute(async () => {
-      return await db.select().from(transactions).orderBy(desc(transactions.createdAt));
+      return await db.query.transactions.findMany({
+        with: {
+          contact: true,
+        },
+        orderBy: [desc(transactions.createdAt)]
+      });
     });
     return ok(result);
   } catch (error: any) {
@@ -44,15 +50,28 @@ export async function createTransaction(input: unknown): Promise<Result<any>> {
   // 2. Ejecutar la operación de base de datos protegida
   try {
     const result = await dbBreaker.execute(async () => {
-      // Inserción real con Drizzle ORM a PostgreSQL
-      const [inserted] = await db.insert(transactions).values({
-        amount: validData.amount.toString(), // numeric decimal in pg maps to string or number, string is safer
-        cbu: validData.cbu,
-        description: validData.description,
-        status: "completed" // asumiendo flujo sincrono ideal
-      }).returning();
-      
-      return inserted;
+      return await db.transaction(async (tx) => {
+        // Inserción real con Drizzle ORM a PostgreSQL
+        const [inserted] = await tx.insert(transactions).values({
+          amount: validData.amount.toString(),
+          currency: validData.currency,
+          cbu: validData.cbu,
+          description: validData.description,
+          status: "completed",
+          contactId: validData.contactId,
+          sourceAccountId: validData.sourceAccountId,
+          destinationAccountId: validData.destinationAccountId,
+        }).returning();
+
+        // 3. Si hay un contacto, actualizar su fecha de último uso (ACID)
+        if (validData.contactId) {
+          await tx.update(contacts)
+            .set({ lastUsedAt: sql`now()` })
+            .where(eq(contacts.id, validData.contactId));
+        }
+        
+        return inserted;
+      });
     });
     
     revalidatePath("/[lang]", "layout");

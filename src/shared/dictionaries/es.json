@@ -50,5 +50,19 @@
     "switch": "Cambiar idioma",
     "es": "Español",
     "en": "English"
+  },
+  "contacts": {
+    "title": "Contactos",
+    "addTitle": "Nuevo Contacto",
+    "nameLabel": "Nombre Completo",
+    "aliasLabel": "Apodo / Alias",
+    "emailLabel": "Email (Opcional)",
+    "submitButton": "Guardar Contacto",
+    "successMessage": "Contacto guardado correctamente",
+    "errorMessage": "Error al guardar contacto",
+    "methodType": "Tipo de Cuenta",
+    "methodValue": "CBU / CVU / Alias",
+    "methodLabel": "Etiqueta (Ej: Personal)",
+    "emptyMessage": "No tienes contactos guardados"
   }
 }

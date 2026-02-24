@@ -8,6 +8,8 @@ import { BankAccountForm } from "../../features/bank-accounts/components/BankAcc
 import { BankAccountList } from "../../features/bank-accounts/components/BankAccountList";
 import { DigitalWalletForm } from "../../features/digital-wallets/components/DigitalWalletForm";
 import { DigitalWalletList } from "../../features/digital-wallets/components/DigitalWalletList";
+import { ContactForm } from "../../features/contacts/components/ContactForm";
+import { ContactList } from "../../features/contacts/components/ContactList";
 import { 
   Container, 
   Navbar, 
@@ -18,6 +20,10 @@ import {
 } from "../../shared/ui";
 import styles from "./page.module.css";
 
+import { getBankAccounts } from "../../features/bank-accounts/actions";
+import { getDigitalWallets } from "../../features/digital-wallets/actions";
+import { getContacts } from "../../features/contacts/actions";
+
 export default async function Home({
   params,
 }: {
@@ -25,6 +31,17 @@ export default async function Home({
 }) {
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
+
+  // Fetch data for the Smart Transaction Form
+  const [accountsRes, walletsRes, contactsRes] = await Promise.all([
+    getBankAccounts(),
+    getDigitalWallets(),
+    getContacts(),
+  ]);
+
+  const accounts = accountsRes.isOk ? accountsRes.value : [];
+  const wallets = walletsRes.isOk ? walletsRes.value : [];
+  const contacts = contactsRes.isOk ? contactsRes.value : [];
 
   return (
     <>
@@ -52,7 +69,12 @@ export default async function Home({
             <div className={styles.grid}>
               <div>
                 <h2 className={styles.sectionTitle}>{dict.transactions.submitButton}</h2>
-                <TransactionForm dict={dict.transactions} />
+                <TransactionForm 
+                  dict={dict.transactions} 
+                  accounts={accounts}
+                  wallets={wallets}
+                  contacts={contacts}
+                />
               </div>
               <div>
                 <h2 className={styles.sectionTitle}>{dict.transactions.tableDate}s</h2>
@@ -82,6 +104,17 @@ export default async function Home({
               <div style={{ marginTop: "1rem" }}>
                 <Suspense fallback={<p>Cargando billeteras...</p>}>
                   <DigitalWalletList dict={dict.digitalWallets} />
+                </Suspense>
+              </div>
+            </section>
+
+            {/* SECCIÓN CONTACTOS */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>{dict.contacts.title}</h2>
+              <ContactForm dict={dict.contacts} />
+              <div style={{ marginTop: "1rem" }}>
+                <Suspense fallback={<p>Cargando contactos...</p>}>
+                  <ContactList dict={dict.contacts} />
                 </Suspense>
               </div>
             </section>

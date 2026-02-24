@@ -50,5 +50,19 @@
     "switch": "Switch language",
     "es": "Español",
     "en": "English"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "addTitle": "New Contact",
+    "nameLabel": "Full Name",
+    "aliasLabel": "Nickname / Alias",
+    "emailLabel": "Email (Optional)",
+    "submitButton": "Save Contact",
+    "successMessage": "Contact saved successfully",
+    "errorMessage": "Error saving contact",
+    "methodType": "Account Type",
+    "methodValue": "CBU / CVU / Alias",
+    "methodLabel": "Label (Ex: Personal)",
+    "emptyMessage": "No contacts saved yet"
   }
 }

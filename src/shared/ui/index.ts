@@ -19,3 +19,4 @@ export { default as Dialog } from "./feedback/Dialog";
 
 export { default as Table } from "./display/Table";
 export * from "./display/Table";
+export { Badge } from "./display/Badge";

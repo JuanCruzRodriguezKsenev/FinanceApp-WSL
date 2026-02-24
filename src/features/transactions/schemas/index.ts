@@ -20,11 +20,17 @@ export const getCreateTransactionSchema = (dict?: any) => {
       .number({ message: d.amountRequired })
       .positive(d.amountPositive)
       .max(1000000, d.amountMax),
+    currency: z.enum(["ARS", "USD"]).default("ARS"),
     cbu: z
       .string({ message: d.cbuRequired })
       .length(22, d.cbuLength)
-      .regex(/^\d+$/, d.cbuNumbers),
+      .regex(/^\d+$/, d.cbuNumbers)
+      .optional()
+      .or(z.literal("")),
     description: z.string().max(255, d.descMax).optional(),
+    sourceAccountId: z.string().uuid().optional(),
+    contactId: z.string().uuid().optional(),
+    destinationAccountId: z.string().uuid().optional(),
   });
 };
 
