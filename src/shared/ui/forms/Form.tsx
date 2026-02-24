@@ -3,9 +3,10 @@
 import { ComponentProps,ReactNode } from "react";
 
 // Importaciones corregidas (ajusta según tu estructura real)
-import Button from "../Buttons/Button";
-import SubmitButton from "../Buttons/Submit/Submit";
+import Button from "./Button";
+import SubmitButton from "./Submit/Submit";
 import Checkbox from "./Checkbox";
+
 import styles from "./Form.module.css";
 import FormField from "./FormField";
 import Input from "./Input";

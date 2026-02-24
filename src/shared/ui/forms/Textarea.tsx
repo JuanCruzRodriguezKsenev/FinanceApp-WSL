@@ -1,4 +1,7 @@
+"use client";
+
 import { forwardRef, TextareaHTMLAttributes } from "react";
+
 
 import styles from "./Form.module.css";
 import FormField from "./FormField";

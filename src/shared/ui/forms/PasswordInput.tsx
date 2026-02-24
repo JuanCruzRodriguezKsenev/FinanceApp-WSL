@@ -1,5 +1,8 @@
+"use client";
+
 import {
   ChangeEvent,
+
   FocusEvent,
   forwardRef,
   InputHTMLAttributes,
@@ -138,14 +141,9 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
       setRevealed((prev) => !prev);
     };
 
-    useEffect(() => {
-      if (value !== undefined) {
-        setInternalValue(value.toString());
-      }
-    }, [value]);
-
     return (
       <FormField
+
         id={props.id}
         label={label}
         required={props.required}

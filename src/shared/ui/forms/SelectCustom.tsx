@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useMemo, useRef, useState } from "react";
+
 
 import styles from "./Form.module.css";
 import FormField from "./FormField";

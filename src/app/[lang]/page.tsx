@@ -1,7 +1,7 @@
 import { getDictionary } from "../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../shared/lib/i18n/i18n-config";
 import LanguageSwitcher from "../../shared/components/ui/LanguageSwitcher";
-import ThemeSelector from "../../shared/components/ui/ThemeSelector";
+import { ThemeToggle } from "../../shared/components/ui/ThemeToggle";
 import { TransactionForm } from "../../features/transactions/components/TransactionForm";
 import { BankAccountForm } from "../../features/bank-accounts/components/BankAccountForm";
 import { DigitalWalletForm } from "../../features/digital-wallets/components/DigitalWalletForm";
@@ -20,14 +20,19 @@ export default async function Home({
 
   const cookieStore = await cookies();
   const rawTheme = cookieStore.get("NEXT_THEME")?.value;
-  let theme: ThemePreference = DEFAULT_THEME;
-  try { if (rawTheme) theme = JSON.parse(rawTheme); } catch (e) {}
+  if (rawTheme) {
+    try {
+      JSON.parse(rawTheme);
+    } catch {
+      // ignore
+    }
+  }
 
   return (
     <Container className={styles.mainContainer}>
       <div className={styles.actions}>
         <Flex gap={4} align="center">
-          <ThemeSelector currentTheme={theme} />
+          <ThemeToggle />
           <LanguageSwitcher currentLocale={lang} labels={dict.language} />
         </Flex>
       </div>

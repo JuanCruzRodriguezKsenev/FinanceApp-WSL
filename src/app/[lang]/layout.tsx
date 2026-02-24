@@ -44,7 +44,7 @@ export default async function RootLayout({
 
   try {
     if (rawTheme) theme = JSON.parse(rawTheme);
-  } catch (e) {
+  } catch {
     // Falla silente, se usa DEFAULT_THEME (claro/azul)
   }
 

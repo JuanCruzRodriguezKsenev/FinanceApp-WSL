@@ -1,4 +1,7 @@
+"use client";
+
 // src/components/ui/Form/RadioGroup.tsx
+
 import styles from "./Form.module.css";
 
 interface RadioOption {

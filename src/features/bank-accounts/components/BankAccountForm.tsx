@@ -2,7 +2,7 @@
 
 import { addBankAccount } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Flex, Card, Button, Input, Label, Alert } from "../../../shared/ui";
+import { Flex, Card, Button, Input, Alert } from "../../../shared/ui";
 
 export function BankAccountForm({ dict }: { dict: any }) {
   const { formAction, isPending, state } = useFormAction(addBankAccount);
@@ -13,20 +13,29 @@ export function BankAccountForm({ dict }: { dict: any }) {
         <Flex direction="column" gap={4}>
           <h3>{dict.title}</h3>
           
-          <div>
-            <Label htmlFor="cbu">{dict.cbuLabel}</Label>
-            <Input id="cbu" name="cbu" type="text" required />
-          </div>
+          <Input 
+            id="cbu" 
+            name="cbu" 
+            type="text" 
+            label={dict.cbuLabel}
+            required 
+          />
 
-          <div>
-            <Label htmlFor="alias">{dict.aliasLabel}</Label>
-            <Input id="alias" name="alias" type="text" required />
-          </div>
+          <Input 
+            id="alias" 
+            name="alias" 
+            type="text" 
+            label={dict.aliasLabel}
+            required 
+          />
 
-          <div>
-            <Label htmlFor="bankName">{dict.bankNameLabel}</Label>
-            <Input id="bankName" name="bankName" type="text" required />
-          </div>
+          <Input 
+            id="bankName" 
+            name="bankName" 
+            type="text" 
+            label={dict.bankNameLabel}
+            required 
+          />
 
           <Button type="submit" isLoading={isPending}>
             {dict.submitButton}

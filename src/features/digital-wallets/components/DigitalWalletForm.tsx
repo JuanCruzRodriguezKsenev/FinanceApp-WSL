@@ -2,7 +2,7 @@
 
 import { addDigitalWallet } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Flex, Card, Button, Input, Label, Alert } from "../../../shared/ui";
+import { Flex, Card, Button, Input, Alert } from "../../../shared/ui";
 
 export function DigitalWalletForm({ dict }: { dict: any }) {
   const { formAction, isPending, state } = useFormAction(addDigitalWallet);
@@ -13,15 +13,21 @@ export function DigitalWalletForm({ dict }: { dict: any }) {
         <Flex direction="column" gap={4}>
           <h3>{dict.title}</h3>
           
-          <div>
-            <Label htmlFor="cvu">{dict.cvuLabel}</Label>
-            <Input id="cvu" name="cvu" type="text" required />
-          </div>
+          <Input 
+            id="cvu" 
+            name="cvu" 
+            type="text" 
+            label={dict.cvuLabel}
+            required 
+          />
 
-          <div>
-            <Label htmlFor="provider">{dict.providerLabel}</Label>
-            <Input id="provider" name="provider" type="text" required />
-          </div>
+          <Input 
+            id="provider" 
+            name="provider" 
+            type="text" 
+            label={dict.providerLabel}
+            required 
+          />
 
           <Button type="submit" isLoading={isPending}>
             {dict.submitButton}

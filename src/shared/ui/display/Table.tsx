@@ -64,14 +64,15 @@ export default function Table<T extends { id?: string | number }>({
         </thead>
         <tbody>
           {renderRow
-            ? data.map((item) => (
-                <tr key={item.id || Math.random()} className={styles.row}>
+            ? data.map((item, index) => (
+                <tr key={item.id || index} className={styles.row}>
                   {renderRow(item)}
                 </tr>
               ))
-            : data.map((item) => (
-                <tr key={item.id || Math.random()} className={styles.row}>
+            : data.map((item, index) => (
+                <tr key={item.id || index} className={styles.row}>
                   {columns.map((column) => (
+
                     <td
                       key={String(column.key)}
                       className={styles.cell}
