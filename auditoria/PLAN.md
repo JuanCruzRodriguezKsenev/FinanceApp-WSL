@@ -17,10 +17,11 @@ Este plan detalla las tareas necesarias para elevar la calidad del proyecto sigu
 - [x] **Tipado Estricto de Dictionaries:** Crear un tipo global derivado de `es.json` para evitar el uso de `any` en los diccionarios de i18n.
 
 ## 🟢 Baja Prioridad (Optimización y UX)
-- [ ] **Mejorar LanguageSwitcher:** Utilizar el nuevo patrón de navegación de Next.js 16 para cambios de idioma sin recarga completa del cliente.
-- [ ] **Expandir Tests de Integración:** 
-  - [ ] Crear tests para `createTransaction` que simulen fallos de base de datos y verifiquen la apertura del Circuit Breaker.
-- [ ] **Documentación de API Interna:** Añadir JSDoc a todas las funciones de `shared/lib` para mejorar la experiencia de desarrollo (IntelliSense).
+- [x] **Mejorar LanguageSwitcher:** Utilizar el nuevo patrón de navegación de Next.js 16 para cambios de idioma sin recarga completa del cliente.
+- [x] **Expandir Tests de Integración:** 
+  - [x] Crear tests para `createTransaction` que simulen fallos de base de datos y verifiquen la apertura del Circuit Breaker.
+  - [x] Añadir tests para `addDigitalWallet` con validación de doble circuito.
+- [x] **Documentación de API Interna:** Añadir JSDoc a todas las funciones de `shared/lib` para mejorar la experiencia de desarrollo (IntelliSense).
 
 ---
 

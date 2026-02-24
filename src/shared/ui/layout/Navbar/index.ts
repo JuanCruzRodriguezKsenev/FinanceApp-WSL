@@ -5,3 +5,5 @@ export { NavbarDivider } from "./sections/NavbarDivider";
 export { NavbarEnd } from "./sections/NavbarEnd";
 export { NavbarItem } from "./sections/NavbarItem";
 export { NavbarNav } from "./sections/NavbarNav";
+export { LanguageToggle } from "./sections/LanguageToggle";
+

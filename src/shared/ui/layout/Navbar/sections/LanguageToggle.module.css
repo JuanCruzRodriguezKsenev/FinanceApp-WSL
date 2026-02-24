@@ -1,0 +1,27 @@
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.toggle:hover {
+  border-color: var(--color-primary);
+  background: var(--bg-hover);
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+.text {
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+}

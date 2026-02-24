@@ -1,13 +1,16 @@
 import { getDictionary } from "../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../shared/lib/i18n/i18n-config";
-import LanguageSwitcher from "../../shared/components/ui/LanguageSwitcher";
 import { ThemeToggle } from "../../shared/components/ui/ThemeToggle";
 import { TransactionForm } from "../../features/transactions/components/TransactionForm";
 import { BankAccountForm } from "../../features/bank-accounts/components/BankAccountForm";
 import { DigitalWalletForm } from "../../features/digital-wallets/components/DigitalWalletForm";
-import { cookies } from "next/headers";
-import { DEFAULT_THEME, ThemePreference } from "../../shared/constants/theme";
-import { Container, Flex } from "../../shared/ui";
+import { 
+  Container, 
+  Navbar, 
+  NavbarBrand, 
+  NavbarEnd, 
+  LanguageToggle 
+} from "../../shared/ui";
 import styles from "./page.module.css";
 
 export default async function Home({
@@ -18,29 +21,25 @@ export default async function Home({
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
 
-  const cookieStore = await cookies();
-  const rawTheme = cookieStore.get("NEXT_THEME")?.value;
-  if (rawTheme) {
-    try {
-      JSON.parse(rawTheme);
-    } catch {
-      // ignore
-    }
-  }
-
   return (
-    <Container className={styles.mainContainer}>
-      <div className={styles.actions}>
-        <Flex gap={4} align="center">
-          <ThemeToggle />
-          <LanguageSwitcher currentLocale={lang} labels={dict.language} />
-        </Flex>
-      </div>
+    <>
+      <Navbar sticky shadow padding="medium">
+        <NavbarBrand>
+          <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+            FinanceApp
+          </span>
+        </NavbarBrand>
+        <NavbarEnd gap="small">
+          <ThemeToggle variant="icon" />
+          <LanguageToggle currentLocale={lang} />
+        </NavbarEnd>
+      </Navbar>
 
-      <header className={styles.header}>
-        <h1 className={styles.title}>{dict.transactions.title}</h1>
-        <p className={styles.subtitle}>{dict.transactions.subtitle}</p>
-      </header>
+      <Container className={styles.mainContainer}>
+        <header className={styles.header}>
+          <h1 className={styles.title}>{dict.transactions.title}</h1>
+          <p className={styles.subtitle}>{dict.transactions.subtitle}</p>
+        </header>
 
       <div className={styles.grid}>
         <section>
@@ -59,5 +58,6 @@ export default async function Home({
         </section>
       </div>
     </Container>
+    </>
   );
 }
