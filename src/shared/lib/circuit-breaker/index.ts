@@ -114,11 +114,20 @@ export class CircuitBreaker {
 
   private async onFailure(currentData: CBData) {
     let { failureCount, state, nextAttempt } = currentData;
-    failureCount++;
-    if (failureCount >= this.options.failureThreshold) {
+    
+    // Si falla en HALF_OPEN, abrimos inmediatamente
+    if (state === "HALF_OPEN") {
+      failureCount = this.options.failureThreshold;
       state = "OPEN";
       nextAttempt = Date.now() + this.options.resetTimeoutMs;
+    } else {
+      failureCount++;
+      if (failureCount >= this.options.failureThreshold) {
+        state = "OPEN";
+        nextAttempt = Date.now() + this.options.resetTimeoutMs;
+      }
     }
+    
     await this.setData({ state, failureCount, nextAttempt });
   }
 

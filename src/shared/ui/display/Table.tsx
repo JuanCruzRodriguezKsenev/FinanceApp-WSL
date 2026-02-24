@@ -1,7 +1,8 @@
-// src/components/ui/Table/Table.tsx
 import { ReactNode } from "react";
-
 import styles from "./Table.module.css";
+import TableHeader from "./TableHeader";
+import TableRow from "./TableRow";
+import TableCell from "./TableCell";
 
 interface Column<T> {
   key: keyof T;
@@ -39,57 +40,52 @@ export default function Table<T extends { id?: string | number }>({
   }
 
   return (
-    <div
-      className={`${styles.container} ${className}`}
-    >
-
+    <div className={`${styles.container} ${className}`}>
       <table
-        className={`${styles.table} ${striped ? styles.striped : ""} ${hoverable ? styles.hoverable : ""}`}
+        className={`${styles.table} ${striped ? styles.striped : ""} ${
+          hoverable ? styles.hoverable : ""
+        }`}
       >
         <thead>
           <tr className={styles.headerRow}>
             {columns.map((column) => (
-              <th
+              <TableHeader
                 key={String(column.key)}
-                className={styles.header}
-                style={{
-                  width: column.width,
-                  textAlign: column.align || "left",
-                }}
+                align={column.align}
+                width={column.width}
               >
                 {column.label}
-              </th>
+              </TableHeader>
             ))}
           </tr>
         </thead>
         <tbody>
           {renderRow
             ? data.map((item, index) => (
-                <tr key={item.id || index} className={styles.row}>
+                <TableRow key={item.id || index}>
                   {renderRow(item)}
-                </tr>
+                </TableRow>
               ))
             : data.map((item, index) => (
-                <tr key={item.id || index} className={styles.row}>
+                <TableRow key={item.id || index}>
                   {columns.map((column) => (
-
-                    <td
+                    <TableCell
                       key={String(column.key)}
-                      className={styles.cell}
-                      style={{ textAlign: column.align || "left" }}
+                      align={column.align}
                     >
                       {column.render
                         ? column.render(item[column.key], item)
                         : String(item[column.key])}
-                    </td>
+                    </TableCell>
                   ))}
-                </tr>
+                </TableRow>
               ))}
         </tbody>
       </table>
     </div>
   );
 }
+
 
 export { default as TableCell } from "./TableCell";
 export { default as TableHeader } from "./TableHeader";
