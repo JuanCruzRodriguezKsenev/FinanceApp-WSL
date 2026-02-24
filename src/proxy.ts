@@ -29,7 +29,7 @@ function getLocale(request: NextRequest): string | undefined {
   }
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Si la ruta pertenece al sistema de archivos internos de Next.js (_next, static) la ignoramos

@@ -2,40 +2,34 @@
 
 import { addDigitalWallet } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Flex, Card, Button, Input, Alert } from "../../../shared/ui";
+import { Card, Input, Alert, Form } from "../../../shared/ui";
+import { Dictionary } from "../../../shared/lib/i18n/types";
 
-export function DigitalWalletForm({ dict }: { dict: any }) {
-  const { formAction, isPending, state } = useFormAction(addDigitalWallet);
+export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"] }) {
+  const { formAction, state } = useFormAction(addDigitalWallet);
 
   return (
     <Card>
-      <form action={formAction}>
-        <Flex direction="column" gap={4}>
-          <h3>{dict.title}</h3>
-          
-          <Input 
-            id="cvu" 
-            name="cvu" 
-            type="text" 
-            label={dict.cvuLabel}
-            required 
-          />
+      <h3>{dict.title}</h3>
+      <Form action={formAction} submitLabel={dict.submitButton}>
+        <Input 
+          id="cvu" 
+          name="cvu" 
+          type="text" 
+          label={dict.cvuLabel}
+          error={state?.isErr && state.error.field === "cvu" ? state.error.message : undefined}
+          required 
+        />
 
-          <Input 
-            id="provider" 
-            name="provider" 
-            type="text" 
-            label={dict.providerLabel}
-            required 
-          />
+        <Input 
+          id="provider" 
+          name="provider" 
+          type="text" 
+          label={dict.providerLabel}
+          error={state?.isErr && state.error.field === "provider" ? state.error.message : undefined}
+          required 
+        />
 
-          <Button type="submit" isLoading={isPending}>
-            {dict.submitButton}
-          </Button>
-        </Flex>
-      </form>
-
-      <div style={{ marginTop: "20px" }}>
         {state?.isOk === false && (
           <Alert type="error" title={dict.errorMessage}>
             {state.error.message}
@@ -47,7 +41,7 @@ export function DigitalWalletForm({ dict }: { dict: any }) {
             <pre style={{ fontSize: "0.8em" }}>{JSON.stringify(state.value, null, 2)}</pre>
           </Alert>
         )}
-      </div>
+      </Form>
     </Card>
   );
 }

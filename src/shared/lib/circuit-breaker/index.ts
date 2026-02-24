@@ -1,17 +1,11 @@
 import { Redis } from "@upstash/redis";
+import { logger } from "../logger";
 
 export type CircuitBreakerState = "CLOSED" | "OPEN" | "HALF_OPEN";
 
 export interface CircuitBreakerOptions {
   failureThreshold: number; // Número de fallos antes de abrir el circuito
   resetTimeoutMs: number; // Tiempo en ms antes de pasar a HALF_OPEN
-}
-
-export class CircuitBreakerOpenError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "CircuitBreakerOpenError";
-  }
 }
 
 type CBData = {
@@ -24,17 +18,22 @@ type CBData = {
 let redisClient: Redis | null = null;
 
 export function initializeRedisClient() {
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  if (
+    process.env.UPSTASH_REDIS_REST_URL &&
+    process.env.UPSTASH_REDIS_REST_TOKEN
+  ) {
     try {
       redisClient = new Redis({
         url: process.env.UPSTASH_REDIS_REST_URL,
         token: process.env.UPSTASH_REDIS_REST_TOKEN,
       });
     } catch (error) {
-      console.warn("Could not initialize Upstash Redis client. Falling back to memory.");
+      console.warn(
+        "Could not initialize Upstash Redis client. Falling back to memory.",
+      );
     }
   } else {
-     redisClient = null;
+    redisClient = null;
   }
 }
 
@@ -42,9 +41,18 @@ export function initializeRedisClient() {
 initializeRedisClient();
 
 /**
- * Un Circuit Breaker Distribuido.
- * Si Redis está configurado usa Upstash Redis para compartir estado entre instancias Vercel.
- * De lo contrario, hace fallback a memoria RAM.
+ * Error lanzado cuando el Circuit Breaker está en estado OPEN.
+ */
+export class CircuitBreakerOpenError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "CircuitBreakerOpenError";
+  }
+}
+
+/**
+ * Un Circuit Breaker Distribuido que utiliza Upstash Redis para persistir el estado.
+ * Implementa una arquitectura "Fast-Fail" para proteger servicios degradados.
  */
 export class CircuitBreaker {
   private memData: CBData = { state: "CLOSED", failureCount: 0, nextAttempt: 0 };
@@ -54,20 +62,33 @@ export class CircuitBreaker {
     private readonly options: CircuitBreakerOptions
   ) {}
 
+  /**
+   * Obtiene el estado actual del circuito desde Redis o memoria local.
+   */
   private async getData(): Promise<CBData> {
     if (redisClient) {
       try {
         const data = await redisClient.get<CBData>(`cb:${this.name}`);
         return data || { state: "CLOSED", failureCount: 0, nextAttempt: 0 };
       } catch (err) {
-        // En caso de fallo de red a Redis, fallback a memoria
         return this.memData;
       }
     }
     return this.memData;
   }
 
+  /**
+   * Persiste el estado del circuito y registra transiciones en los logs.
+   */
   private async setData(data: CBData): Promise<void> {
+    const oldData = await this.getData();
+    if (oldData.state !== data.state) {
+      logger.info(
+        { breaker: this.name, from: oldData.state, to: data.state },
+        `Circuit Breaker state transition: ${oldData.state} -> ${data.state}`
+      );
+    }
+
     if (redisClient) {
       try {
         await redisClient.set(`cb:${this.name}`, data);
@@ -79,16 +100,18 @@ export class CircuitBreaker {
     }
   }
 
+  /**
+   * Envuelve una acción asíncrona con la protección del Circuit Breaker.
+   * @throws {CircuitBreakerOpenError} Si el circuito está abierto.
+   */
   public async execute<T>(action: () => Promise<T>): Promise<T> {
     const data = await this.getData();
 
     if (data.state === "OPEN") {
       if (Date.now() >= data.nextAttempt) {
-        // El timeout ha expirado, pasamos a HALF_OPEN para probar
         data.state = "HALF_OPEN";
         await this.setData(data);
       } else {
-        // Seguimos en OPEN, rechazamos de inmediato ("fast fail")
         throw new CircuitBreakerOpenError(
           `Circuit breaker '${this.name}' is OPEN.`
         );
@@ -97,7 +120,6 @@ export class CircuitBreaker {
 
     try {
       const result = await action();
-      // Si la llamada tiene éxito, reiniciamos el circuito
       if (data.state === "HALF_OPEN" || data.failureCount > 0) {
         await this.onSuccess();
       }
@@ -115,7 +137,6 @@ export class CircuitBreaker {
   private async onFailure(currentData: CBData) {
     let { failureCount, state, nextAttempt } = currentData;
     
-    // Si falla en HALF_OPEN, abrimos inmediatamente
     if (state === "HALF_OPEN") {
       failureCount = this.options.failureThreshold;
       state = "OPEN";
@@ -131,6 +152,9 @@ export class CircuitBreaker {
     await this.setData({ state, failureCount, nextAttempt });
   }
 
+  /**
+   * Retorna el estado lógico del circuito.
+   */
   public async getState(): Promise<CircuitBreakerState> {
     const data = await this.getData();
     if (data.state === "OPEN" && Date.now() >= data.nextAttempt) {
@@ -139,7 +163,9 @@ export class CircuitBreaker {
     return data.state;
   }
   
-  // Method to reset state mainly for testing purposes
+  /**
+   * Reinicia manualmente el estado del circuito.
+   */
   public async clearState(): Promise<void> {
       await this.setData({ state: "CLOSED", failureCount: 0, nextAttempt: 0 });
   }
