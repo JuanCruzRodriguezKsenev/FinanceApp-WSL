@@ -65,6 +65,20 @@ describe('createTransaction Action', () => {
     expect(db.insert).toHaveBeenCalled();
   });
 
+  it('should create a transaction successfully with string amount (coercion)', async () => {
+    const input = {
+      amount: '500.50',
+      cbu: '0123456789012345678912',
+    };
+
+    const result = await createTransaction(input);
+
+    expect(result.isOk).toBe(true);
+    if (result.isOk) {
+      expect(result.value).toEqual({ id: '123' });
+    }
+  });
+
   it('should return validation error for invalid input', async () => {
     const input = {
       amount: -10, // Invalid amount

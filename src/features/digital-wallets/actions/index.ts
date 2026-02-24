@@ -6,6 +6,7 @@ import { validateSchema } from "../../../shared/lib/validators";
 import { CircuitBreakerFactory, CircuitBreakerOpenError } from "../../../shared/lib/circuit-breaker";
 import { getAddWalletSchema, AddWalletInput } from "../schemas";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
@@ -70,6 +71,7 @@ export async function addDigitalWallet(input: unknown): Promise<Result<any>> {
       return inserted;
     });
     
+    revalidatePath("/[lang]", "layout");
     return ok(result);
   } catch (error: any) {
     console.error(">>> DB ERROR DEBUG (WALLETS) <<<", error);
@@ -78,7 +80,7 @@ export async function addDigitalWallet(input: unknown): Promise<Result<any>> {
     const errorDetail = error.detail || "";
     
     if (error instanceof CircuitBreakerOpenError) {
-      return err(internalError(walletDict.apiErrorMessage || "Payment gateway unavailable", { circuitStatus: "OPEN" }));
+      return err(internalError(walletDict.dbErrorMessage || "Database temporarily unavailable", { circuitStatus: "OPEN" }));
     }
 
     if (

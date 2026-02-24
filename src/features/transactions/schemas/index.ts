@@ -16,7 +16,7 @@ export const getCreateTransactionSchema = (dict?: any) => {
   };
 
   return z.object({
-    amount: z
+    amount: z.coerce
       .number({ message: d.amountRequired })
       .positive(d.amountPositive)
       .max(1000000, d.amountMax),

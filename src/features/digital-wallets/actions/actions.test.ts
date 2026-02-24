@@ -31,11 +31,8 @@ vi.mock('../../../shared/lib/db', () => ({
 }));
 
 const { mockApiExecute, mockDbExecute } = vi.hoisted(() => ({
-  mockApiExecute: vi.fn(async (fn) => {
-    // Para estabilizar tests, simulamos éxito de la validación externa por defecto
-    return { valid: true, owner: "User Name" };
-  }),
-  mockDbExecute: vi.fn((fn) => fn()),
+  mockApiExecute: vi.fn(),
+  mockDbExecute: vi.fn(),
 }));
 
 vi.mock('../../../shared/lib/circuit-breaker', async () => {
@@ -56,6 +53,9 @@ vi.mock('../../../shared/lib/circuit-breaker', async () => {
 describe('addDigitalWallet Action', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default success implementations
+    mockApiExecute.mockImplementation(async (fn) => ({ valid: true, owner: "User Name" }));
+    mockDbExecute.mockImplementation(async (fn) => fn());
   });
 
   it('should add a wallet successfully when both breakers are closed', async () => {

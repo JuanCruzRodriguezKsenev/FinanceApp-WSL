@@ -6,6 +6,7 @@ import { validateSchema } from "../../../shared/lib/validators";
 import { CircuitBreakerFactory, CircuitBreakerOpenError } from "../../../shared/lib/circuit-breaker";
 import { getAddBankAccountSchema, AddBankAccountInput } from "../schemas";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
@@ -52,6 +53,7 @@ export async function addBankAccount(input: unknown): Promise<Result<any>> {
       return inserted;
     });
     
+    revalidatePath("/[lang]", "layout");
     return ok(result);
   } catch (error: any) {
     // CAPTURA TOTAL: Logueamos el objeto error completo a la consola para ver propiedades ocultas
