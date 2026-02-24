@@ -22,6 +22,7 @@ export async function getBankAccounts(): Promise<Result<any[]>> {
     });
     return ok(result);
   } catch (error: any) {
+    logger.error({ msg: "FETCH_BANK_ACCOUNTS_ERROR", error: error.message }, "Error fetching bank accounts");
     return err(internalError("Error fetching bank accounts", { details: error.message }));
   }
 }

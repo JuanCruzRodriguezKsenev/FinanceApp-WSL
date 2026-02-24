@@ -29,6 +29,7 @@ export async function getTransactions(): Promise<Result<any[]>> {
     });
     return ok(result);
   } catch (error: any) {
+    logger.error({ msg: "FETCH_TRANSACTIONS_ERROR", error: error.message }, "Error fetching transactions");
     return err(internalError("Error fetching transactions", { details: error.message }));
   }
 }

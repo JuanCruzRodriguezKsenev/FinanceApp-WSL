@@ -33,6 +33,7 @@ export async function getContacts(): Promise<Result<any[]>> {
     });
     return ok(result);
   } catch (error: any) {
+    logger.error({ msg: "FETCH_CONTACTS_ERROR", error: error.message }, "Error fetching contacts");
     return err(internalError("Error fetching contacts", { details: error.message }));
   }
 }

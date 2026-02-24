@@ -23,9 +23,11 @@ export async function getDigitalWallets(): Promise<Result<any[]>> {
     });
     return ok(result);
   } catch (error: any) {
+    logger.error({ msg: "FETCH_WALLETS_ERROR", error: error.message }, "Error fetching digital wallets");
     return err(internalError("Error fetching digital wallets", { details: error.message }));
   }
 }
+
 const apiBreaker = CircuitBreakerFactory.externalAPI("payment-gateway");
 
 // Mock de validación con API de pasarela (e.g. MercadoPago / Coelms)
