@@ -11,14 +11,27 @@ import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
 import { bankAccounts } from "../schema.db";
-import { desc } from "drizzle-orm";
+import { desc, sql, eq } from "drizzle-orm";
+import { financialTargets } from "../../goals/schema.db";
 
 const dbBreaker = CircuitBreakerFactory.database("bank-accounts-db");
 
 export async function getBankAccounts(): Promise<Result<any[]>> {
   try {
     const result = await dbBreaker.execute(async () => {
-      return await db.select().from(bankAccounts).orderBy(desc(bankAccounts.createdAt));
+      // Obtenemos cuentas con el total de sus reservas vinculadas
+      return await db.select({
+        id: bankAccounts.id,
+        cbu: bankAccounts.cbu,
+        alias: bankAccounts.alias,
+        bankName: bankAccounts.bankName,
+        balance: bankAccounts.balance,
+        currency: bankAccounts.currency,
+        locked: sql<string>`coalesce((select sum(current_amount) from ${financialTargets} where ${financialTargets.bankAccountId} = ${bankAccounts.id}), 0)`
+      })
+      .from(bankAccounts)
+      .where(eq(bankAccounts.isActive, true))
+      .orderBy(desc(bankAccounts.createdAt));
     });
     return ok(result);
   } catch (error: any) {
@@ -49,6 +62,8 @@ export async function addBankAccount(input: unknown): Promise<Result<any>> {
         cbu: validData.cbu,
         alias: validData.alias,
         bankName: validData.bankName,
+        balance: validData.balance.toString(),
+        currency: validData.currency,
       }).returning();
       
       return inserted;

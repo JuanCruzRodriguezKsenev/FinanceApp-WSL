@@ -12,16 +12,13 @@ export const getAddBankAccountSchema = (dict?: any) => {
   };
 
   return z.object({
-    cbu: z
-      .string({ message: d.cbuRequired })
-      .length(22, d.cbuLength)
-      .regex(/^\d+$/, d.cbuNumbers),
-    alias: z
-      .string({ message: d.aliasRequired })
-      .min(3, d.aliasMin)
-      .max(50, d.aliasMax),
-    bankName: z.string({ message: d.bankNameRequired }).min(2),
+    cbu: z.string({ message: d.cbuRequired }).length(22, d.cbuLength).regex(/^\d+$/, d.cbuNumbers),
+    alias: z.string({ message: d.aliasRequired }).min(3, d.aliasMin).max(50),
+    bankName: z.string({ message: d.bankRequired }).min(2, d.bankMin).max(100),
+    balance: z.coerce.number().default(0),
+    currency: z.enum(["ARS", "USD"]).default("ARS"),
   });
 };
+
 
 export type AddBankAccountInput = z.infer<ReturnType<typeof getAddBankAccountSchema>>;

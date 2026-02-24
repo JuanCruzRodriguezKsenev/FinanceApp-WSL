@@ -12,6 +12,8 @@ import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
 import { transactions } from "../schema.db";
 import { contacts } from "../../contacts/schema.db";
+import { bankAccounts } from "../../bank-accounts/schema.db";
+import { digitalWallets } from "../../digital-wallets/schema.db";
 import { desc, eq, sql } from "drizzle-orm";
 
 // Obtenemos una instancia global del Circuit Breaker para la Base de Datos
@@ -52,7 +54,37 @@ export async function createTransaction(input: unknown): Promise<Result<any>> {
   try {
     const result = await dbBreaker.execute(async () => {
       return await db.transaction(async (tx) => {
-        // Inserción real con Drizzle ORM a PostgreSQL
+        // 1. Descontar de la cuenta origen
+        if (validData.sourceAccountId) {
+          // Intentamos en bancos
+          const [updatedBank] = await tx.update(bankAccounts)
+            .set({ balance: sql`${bankAccounts.balance} - ${validData.amount.toString()}` })
+            .where(eq(bankAccounts.id, validData.sourceAccountId))
+            .returning();
+          
+          if (!updatedBank) {
+            // Intentamos en billeteras
+            await tx.update(digitalWallets)
+              .set({ balance: sql`${digitalWallets.balance} - ${validData.amount.toString()}` })
+              .where(eq(digitalWallets.id, validData.sourceAccountId));
+          }
+        }
+
+        // 2. Sumar a la cuenta destino (si es una transferencia propia)
+        if (validData.destinationAccountId) {
+           const [updatedBankDest] = await tx.update(bankAccounts)
+            .set({ balance: sql`${bankAccounts.balance} + ${validData.amount.toString()}` })
+            .where(eq(bankAccounts.id, validData.destinationAccountId))
+            .returning();
+          
+          if (!updatedBankDest) {
+            await tx.update(digitalWallets)
+              .set({ balance: sql`${digitalWallets.balance} + ${validData.amount.toString()}` })
+              .where(eq(digitalWallets.id, validData.destinationAccountId));
+          }
+        }
+
+        // 3. Inserción real de la transacción
         const [inserted] = await tx.insert(transactions).values({
           amount: validData.amount.toString(),
           currency: validData.currency,
@@ -64,7 +96,7 @@ export async function createTransaction(input: unknown): Promise<Result<any>> {
           destinationAccountId: validData.destinationAccountId,
         }).returning();
 
-        // 3. Si hay un contacto, actualizar su fecha de último uso (ACID)
+        // 4. Si hay un contacto, actualizar su fecha de último uso
         if (validData.contactId) {
           await tx.update(contacts)
             .set({ lastUsedAt: sql`now()` })

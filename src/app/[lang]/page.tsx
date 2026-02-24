@@ -10,6 +10,8 @@ import { DigitalWalletForm } from "../../features/digital-wallets/components/Dig
 import { DigitalWalletList } from "../../features/digital-wallets/components/DigitalWalletList";
 import { ContactForm } from "../../features/contacts/components/ContactForm";
 import { ContactList } from "../../features/contacts/components/ContactList";
+import { GoalForm } from "../../features/goals/components/GoalForm";
+import { GoalList } from "../../features/goals/components/GoalList";
 import { 
   Container, 
   Navbar, 
@@ -115,6 +117,17 @@ export default async function Home({
               <div style={{ marginTop: "1rem" }}>
                 <Suspense fallback={<p>Cargando contactos...</p>}>
                   <ContactList dict={dict.contacts} />
+                </Suspense>
+              </div>
+            </section>
+
+            {/* SECCIÓN GOALS */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>{dict.goals.title}</h2>
+              <GoalForm dict={dict.goals} accounts={accounts} wallets={wallets} />
+              <div style={{ marginTop: "1rem" }}>
+                <Suspense fallback={<p>Cargando objetivos...</p>}>
+                  <GoalList dict={dict.goals} />
                 </Suspense>
               </div>
             </section>

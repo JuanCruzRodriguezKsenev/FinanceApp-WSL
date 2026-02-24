@@ -11,7 +11,8 @@ import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
 import { digitalWallets } from "../schema.db";
-import { desc } from "drizzle-orm";
+import { desc, sql, eq } from "drizzle-orm";
+import { financialTargets } from "../../goals/schema.db";
 
 // Resiliencia doble: Un breaker para la DB y otro para la API externa.
 const dbBreaker = CircuitBreakerFactory.database("digital-wallets-db");
@@ -19,7 +20,17 @@ const dbBreaker = CircuitBreakerFactory.database("digital-wallets-db");
 export async function getDigitalWallets(): Promise<Result<any[]>> {
   try {
     const result = await dbBreaker.execute(async () => {
-      return await db.select().from(digitalWallets).orderBy(desc(digitalWallets.createdAt));
+      return await db.select({
+        id: digitalWallets.id,
+        cvu: digitalWallets.cvu,
+        provider: digitalWallets.provider,
+        balance: digitalWallets.balance,
+        currency: digitalWallets.currency,
+        locked: sql<string>`coalesce((select sum(current_amount) from ${financialTargets} where ${financialTargets.digitalWalletId} = ${digitalWallets.id}), 0)`
+      })
+      .from(digitalWallets)
+      .where(eq(digitalWallets.isActive, true))
+      .orderBy(desc(digitalWallets.createdAt));
     });
     return ok(result);
   } catch (error: any) {
@@ -68,6 +79,8 @@ export async function addDigitalWallet(input: unknown): Promise<Result<any>> {
       const [inserted] = await db.insert(digitalWallets).values({
         cvu: validData.cvu,
         provider: validData.provider,
+        balance: validData.balance.toString(),
+        currency: validData.currency,
       }).returning();
       
       return inserted;

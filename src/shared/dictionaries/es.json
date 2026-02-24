@@ -64,5 +64,21 @@
     "methodValue": "CBU / CVU / Alias",
     "methodLabel": "Etiqueta (Ej: Personal)",
     "emptyMessage": "No tienes contactos guardados"
+  },
+  "goals": {
+    "title": "Objetivos y Reservas",
+    "addTitle": "Nuevo Objetivo/Reserva",
+    "nameLabel": "Nombre",
+    "typeLabel": "Tipo",
+    "targetAmountLabel": "Monto Objetivo",
+    "currentAmountLabel": "Monto Actual",
+    "deadlineLabel": "Fecha Límite (Opcional)",
+    "linkedAccountLabel": "Vincular a Cuenta",
+    "submitButton": "Crear",
+    "successMessage": "Objetivo creado exitosamente",
+    "errorMessage": "Error al crear el objetivo",
+    "allocateTitle": "Destinar Dinero",
+    "allocateButton": "Ahorrar",
+    "emptyMessage": "No tienes objetivos definidos"
   }
 }

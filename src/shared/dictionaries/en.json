@@ -64,5 +64,21 @@
     "methodValue": "CBU / CVU / Alias",
     "methodLabel": "Label (Ex: Personal)",
     "emptyMessage": "No contacts saved yet"
+  },
+  "goals": {
+    "title": "Goals & Reserves",
+    "addTitle": "New Goal/Reserve",
+    "nameLabel": "Name",
+    "typeLabel": "Type",
+    "targetAmountLabel": "Target Amount",
+    "currentAmountLabel": "Current Amount",
+    "deadlineLabel": "Deadline (Optional)",
+    "linkedAccountLabel": "Link to Account",
+    "submitButton": "Create",
+    "successMessage": "Goal created successfully",
+    "errorMessage": "Error creating goal",
+    "allocateTitle": "Allocate Money",
+    "allocateButton": "Save",
+    "emptyMessage": "No goals defined yet"
   }
 }

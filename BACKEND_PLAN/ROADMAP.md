@@ -12,10 +12,12 @@
 - [x] ACID Compliance: Atomic transaction creation + Contact usage update.
 - [x] Multicurrency metadata storage and ARS/USD UI support.
 
-## Phase 3: Goals & Reserves
-- Implementation of `financial_targets`.
-- Virtual balance deduction logic (Total Balance vs. Available Balance).
-- Allocation/Deallocation API endpoints.
+## Phase 3: Goals & Reserves [COMPLETED]
+- [x] Implementation of `financial_targets` (Goals/Reserves).
+- [x] Virtual balance deduction logic (Available Balance implemented in UI).
+- [x] Allocation API endpoints (`allocateMoney`).
+- [x] UI for creating and managing goals with progress bars.
+- [x] Real balance impact: Transactions now deduct from source and add to destination accounts (ACID).
 
 ## Phase 4: Wealth Management
 - Assets and Liabilities module.
