@@ -1,15 +1,20 @@
+import { Suspense } from "react";
 import { getDictionary } from "../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../shared/lib/i18n/i18n-config";
 import { ThemeToggle } from "../../shared/components/ui/ThemeToggle";
 import { TransactionForm } from "../../features/transactions/components/TransactionForm";
+import { TransactionList } from "../../features/transactions/components/TransactionList";
 import { BankAccountForm } from "../../features/bank-accounts/components/BankAccountForm";
+import { BankAccountList } from "../../features/bank-accounts/components/BankAccountList";
 import { DigitalWalletForm } from "../../features/digital-wallets/components/DigitalWalletForm";
+import { DigitalWalletList } from "../../features/digital-wallets/components/DigitalWalletList";
 import { 
   Container, 
   Navbar, 
   NavbarBrand, 
   NavbarEnd, 
-  LanguageToggle 
+  LanguageToggle,
+  Flex
 } from "../../shared/ui";
 import styles from "./page.module.css";
 
@@ -41,23 +46,48 @@ export default async function Home({
           <p className={styles.subtitle}>{dict.transactions.subtitle}</p>
         </header>
 
-      <div className={styles.grid}>
-        <section>
-          <h2 style={{ marginBottom: "1rem" }}>{dict.transactions.submitButton}</h2>
-          <TransactionForm dict={dict.transactions} />
-        </section>
+        <Flex direction="column" gap={8}>
+          {/* SECCIÓN TRANSACCIONES */}
+          <section className={styles.section}>
+            <div className={styles.grid}>
+              <div>
+                <h2 className={styles.sectionTitle}>{dict.transactions.submitButton}</h2>
+                <TransactionForm dict={dict.transactions} />
+              </div>
+              <div>
+                <h2 className={styles.sectionTitle}>{dict.transactions.tableDate}s</h2>
+                <Suspense fallback={<p>Cargando transacciones...</p>}>
+                  <TransactionList dict={dict.transactions} />
+                </Suspense>
+              </div>
+            </div>
+          </section>
 
-        <section>
-          <h2 style={{ marginBottom: "1rem" }}>{dict.bankAccounts.title}</h2>
-          <BankAccountForm dict={dict.bankAccounts} />
-        </section>
+          <div className={styles.grid}>
+            {/* SECCIÓN CUENTAS */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>{dict.bankAccounts.title}</h2>
+              <BankAccountForm dict={dict.bankAccounts} />
+              <div style={{ marginTop: "1rem" }}>
+                <Suspense fallback={<p>Cargando cuentas...</p>}>
+                  <BankAccountList dict={dict.bankAccounts} />
+                </Suspense>
+              </div>
+            </section>
 
-        <section>
-          <h2 style={{ marginBottom: "1rem" }}>{dict.digitalWallets.title}</h2>
-          <DigitalWalletForm dict={dict.digitalWallets} />
-        </section>
-      </div>
-    </Container>
+            {/* SECCIÓN BILLETERAS */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>{dict.digitalWallets.title}</h2>
+              <DigitalWalletForm dict={dict.digitalWallets} />
+              <div style={{ marginTop: "1rem" }}>
+                <Suspense fallback={<p>Cargando billeteras...</p>}>
+                  <DigitalWalletList dict={dict.digitalWallets} />
+                </Suspense>
+              </div>
+            </section>
+          </div>
+        </Flex>
+      </Container>
     </>
   );
 }

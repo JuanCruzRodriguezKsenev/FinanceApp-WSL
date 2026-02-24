@@ -1,12 +1,25 @@
 "use client";
 
+import { useEffect } from "react";
 import { addBankAccount } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
 import { Card, Input, Alert, Form } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
+import { useToast } from "@/contexts";
 
 export function BankAccountForm({ dict }: { dict: Dictionary["bankAccounts"] }) {
-  const { formAction, state } = useFormAction(addBankAccount);
+  const { showToast } = useToast();
+  const { formAction, state } = useFormAction(addBankAccount, {
+    onSuccess: () => {
+      showToast(dict.successMessage, "success");
+    }
+  });
+
+  useEffect(() => {
+    if (state?.isErr) {
+      showToast(state.error.message, "error");
+    }
+  }, [state, showToast]);
 
   return (
     <Card>

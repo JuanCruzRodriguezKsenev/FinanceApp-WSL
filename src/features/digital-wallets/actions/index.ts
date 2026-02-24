@@ -1,6 +1,7 @@
 "use server";
 
 import { Result, ok, err, internalError } from "../../../shared/lib/result";
+import { logger } from "../../../shared/lib/logger";
 import { validateSchema } from "../../../shared/lib/validators";
 import { CircuitBreakerFactory, CircuitBreakerOpenError } from "../../../shared/lib/circuit-breaker";
 import { getAddWalletSchema, AddWalletInput } from "../schemas";
@@ -9,9 +10,21 @@ import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
 import { digitalWallets } from "../schema.db";
+import { desc } from "drizzle-orm";
 
 // Resiliencia doble: Un breaker para la DB y otro para la API externa.
 const dbBreaker = CircuitBreakerFactory.database("digital-wallets-db");
+
+export async function getDigitalWallets(): Promise<Result<any[]>> {
+  try {
+    const result = await dbBreaker.execute(async () => {
+      return await db.select().from(digitalWallets).orderBy(desc(digitalWallets.createdAt));
+    });
+    return ok(result);
+  } catch (error: any) {
+    return err(internalError("Error fetching digital wallets", { details: error.message }));
+  }
+}
 const apiBreaker = CircuitBreakerFactory.externalAPI("payment-gateway");
 
 // Mock de validación con API de pasarela (e.g. MercadoPago / Coelms)
@@ -58,12 +71,30 @@ export async function addDigitalWallet(input: unknown): Promise<Result<any>> {
     });
     
     return ok(result);
-  } catch (error) {
+  } catch (error: any) {
+    console.error(">>> DB ERROR DEBUG (WALLETS) <<<", error);
+    
+    const errorMessage = error.message || "";
+    const errorDetail = error.detail || "";
+    
     if (error instanceof CircuitBreakerOpenError) {
-      return err(internalError(walletDict.dbErrorMessage || "Database temporarily unavailable", { circuitStatus: "OPEN" }));
+      return err(internalError(walletDict.apiErrorMessage || "Payment gateway unavailable", { circuitStatus: "OPEN" }));
     }
+
+    if (
+      error.code === "23505" || 
+      errorMessage.toLowerCase().includes("unique") || 
+      errorDetail.toLowerCase().includes("already exists") ||
+      errorMessage.toLowerCase().includes("already exists") ||
+      errorMessage.toLowerCase().includes("duplicate")
+    ) {
+      return err(internalError(walletDict.uniqueCvuError || "A wallet with this CVU is already linked"));
+    }
+
     return err(internalError(walletDict.dbErrorMessage || "An error occurred while adding the wallet", { 
-      details: error instanceof Error ? error.message : "Unknown" 
+      technical: errorMessage,
+      detail: errorDetail,
+      dbCode: error.code
     }));
   }
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { Result, ok, err, internalError } from "../../../shared/lib/result";
+import { logger } from "../../../shared/lib/logger";
 import { validateSchema } from "../../../shared/lib/validators";
 import { CircuitBreakerFactory, CircuitBreakerOpenError } from "../../../shared/lib/circuit-breaker";
 import { getCreateTransactionSchema, CreateTransactionInput } from "../schemas";
@@ -9,9 +10,21 @@ import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
 import { db } from "../../../shared/lib/db";
 import { transactions } from "../schema.db";
+import { desc } from "drizzle-orm";
 
 // Obtenemos una instancia global del Circuit Breaker para la Base de Datos
 const dbBreaker = CircuitBreakerFactory.database("main-db");
+
+export async function getTransactions(): Promise<Result<any[]>> {
+  try {
+    const result = await dbBreaker.execute(async () => {
+      return await db.select().from(transactions).orderBy(desc(transactions.createdAt));
+    });
+    return ok(result);
+  } catch (error: any) {
+    return err(internalError("Error fetching transactions", { details: error.message }));
+  }
+}
 
 export async function createTransaction(input: unknown): Promise<Result<any>> {
   // Obtenemos el diccionario del idioma actual de la petición (Server Action)
@@ -42,12 +55,16 @@ export async function createTransaction(input: unknown): Promise<Result<any>> {
     });
     
     return ok(result);
-  } catch (error) {
+  } catch (error: any) {
+    console.error(">>> DB ERROR DEBUG (TRANSACTIONS) <<<", error);
+    
+    const errorMessage = error.message || "";
     if (error instanceof CircuitBreakerOpenError) {
       return err(internalError(dict.transactions.errorMessage, { circuitStatus: "OPEN" }));
     }
     return err(internalError(dict.transactions.errorMessage, { 
-      details: error instanceof Error ? error.message : "Unknown" 
+      details: errorMessage,
+      dbCode: error.code
     }));
   }
 }

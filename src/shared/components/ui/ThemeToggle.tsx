@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts";
 
 import styles from "./ThemeToggle.module.css";
@@ -14,6 +15,12 @@ export function ThemeToggle({
   className = "",
 }: ThemeToggleProps) {
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Evitar error de hidratación: el servidor no sabe el tema local del cliente
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const cycleTheme = () => {
     const themes: Array<"light" | "dark" | "system"> = [
@@ -27,11 +34,13 @@ export function ThemeToggle({
   };
 
   const getIcon = () => {
+    if (!mounted) return "☀️"; // Icono por defecto estable para hidratación
     if (theme === "system") return "💻";
     return resolvedTheme === "light" ? "☀️" : "🌙";
   };
 
   const getLabel = () => {
+    if (!mounted) return "Cargando...";
     switch (theme) {
       case "light":
         return "Claro";
@@ -48,8 +57,8 @@ export function ThemeToggle({
     <button
       onClick={cycleTheme}
       className={`${styles.toggle} ${styles[variant]} ${className}`}
-      aria-label={`Cambiar tema (actual: ${getLabel()})`}
-      title={`Tema actual: ${getLabel()}`}
+      aria-label={mounted ? `Cambiar tema (actual: ${getLabel()})` : "Cambiar tema"}
+      title={mounted ? `Tema actual: ${getLabel()}` : "Cargando tema..."}
     >
       {variant === "icon" && <span className={styles.icon}>{getIcon()}</span>}
 
@@ -64,3 +73,4 @@ export function ThemeToggle({
     </button>
   );
 }
+

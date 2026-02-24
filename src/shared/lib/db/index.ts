@@ -1,7 +1,20 @@
-import { neon, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
 
-// Usamos neon-http por ser amigable con entornos Edge/Serverless.
-const sql = neon(process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/finance_app');
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not defined in environment variables");
+}
 
-export const db = drizzle(sql);
+// Configuración para entornos Node.js (Vercel lo maneja nativamente)
+if (process.env.NODE_ENV === 'development') {
+  neonConfig.webSocketConstructor = ws;
+}
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+// Logueamos solo el host para seguridad
+const dbHost = new URL(process.env.DATABASE_URL).host;
+console.log(`🔌 DB Connection initialized to host: ${dbHost}`);
+
+export const db = drizzle(pool);

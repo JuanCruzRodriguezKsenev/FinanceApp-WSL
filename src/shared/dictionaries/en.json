@@ -15,13 +15,10 @@
     "errorTitle": "Error",
     "errorFieldAffected": "Affected field",
     "successCardTitle": "Successful Transaction",
-    "amountRequired": "Amount is required",
-    "amountPositive": "Amount must be positive",
-    "amountMax": "Amount cannot exceed 1,000,000",
-    "cbuRequired": "CBU is required",
-    "cbuLength": "CBU must be exactly 22 numbers",
-    "cbuNumbers": "CBU must only contain numbers",
-    "descMax": "Description is too long"
+    "tableAmount": "Amount",
+    "tableCbu": "CBU",
+    "tableStatus": "Status",
+    "tableDate": "Date"
   },
   "bankAccounts": {
     "title": "Bank Accounts",
@@ -30,7 +27,10 @@
     "bankNameLabel": "Bank Name",
     "submitButton": "Add Account",
     "successMessage": "Bank account added successfully",
-    "errorMessage": "Error adding bank account"
+    "errorMessage": "Error adding bank account",
+    "uniqueCbuError": "An account with this CBU already exists",
+    "tableAlias": "Alias",
+    "tableBank": "Bank"
   },
   "digitalWallets": {
     "title": "Digital Wallets",
@@ -38,7 +38,9 @@
     "providerLabel": "Provider",
     "submitButton": "Link Wallet",
     "successMessage": "Wallet linked successfully",
-    "errorMessage": "Error linking wallet"
+    "errorMessage": "Error linking wallet",
+    "uniqueCvuError": "This wallet is already linked",
+    "tableProvider": "Provider"
   },
   "language": {
     "switch": "Switch language",

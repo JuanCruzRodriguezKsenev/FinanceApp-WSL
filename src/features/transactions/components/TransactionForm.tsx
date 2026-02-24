@@ -1,16 +1,25 @@
 "use client";
 
+import { useEffect } from "react";
 import { createTransaction } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
 import { Card, Input, Alert, Form } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
+import { useToast } from "@/contexts";
 
 export function TransactionForm({ dict }: { dict: Dictionary["transactions"] }) {
+  const { showToast } = useToast();
   const { formAction, state } = useFormAction(createTransaction, {
-    onSuccess: () => {
-      // Opcional: limpiar campos o mostrar notificación persistente
+    onSuccess: (data) => {
+      showToast(`${dict.successCardTitle}: ${data.id}`, "success");
     }
   });
+
+  useEffect(() => {
+    if (state?.isErr) {
+      showToast(state.error.message, "error");
+    }
+  }, [state, showToast]);
 
   return (
     <Card>

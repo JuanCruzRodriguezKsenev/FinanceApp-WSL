@@ -11,14 +11,22 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("theme") as Theme) || "system";
-    }
-    return "system";
-  });
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  initialTheme?: Theme;
+}
+
+export function ThemeProvider({ children, initialTheme = "system" }: ThemeProviderProps) {
+  const [theme, setThemeState] = useState<Theme>(initialTheme);
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+
+  // Sincronizar con localStorage después del montaje
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as Theme | null;
+    if (saved && saved !== theme) {
+      setThemeState(saved);
+    }
+  }, [theme]);
 
   useEffect(() => {
     const root = window.document.documentElement;

@@ -1,12 +1,25 @@
 "use client";
 
+import { useEffect } from "react";
 import { addDigitalWallet } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
 import { Card, Input, Alert, Form } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
+import { useToast } from "@/contexts";
 
 export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"] }) {
-  const { formAction, state } = useFormAction(addDigitalWallet);
+  const { showToast } = useToast();
+  const { formAction, state } = useFormAction(addDigitalWallet, {
+    onSuccess: () => {
+      showToast(dict.successMessage, "success");
+    }
+  });
+
+  useEffect(() => {
+    if (state?.isErr) {
+      showToast(state.error.message, "error");
+    }
+  }, [state, showToast]);
 
   return (
     <Card>
