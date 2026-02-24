@@ -12,7 +12,18 @@ export async function TransactionList({ dict }: { dict: Dictionary["transactions
   const columns = [
     { key: "amount" as const, label: dict.tableAmount, render: (val: string) => `$${val}` },
     { key: "cbu" as const, label: dict.tableCbu },
-    { key: "status" as const, label: dict.tableStatus },
+    { 
+      key: "status" as const, 
+      label: dict.tableStatus, 
+      render: (val: string) => {
+        switch (val) {
+          case "completed": return dict.statusCompleted;
+          case "pending": return dict.statusPending;
+          case "failed": return dict.statusFailed;
+          default: return val;
+        }
+      } 
+    },
     { key: "createdAt" as const, label: dict.tableDate, render: (val: string) => new Date(val).toLocaleDateString() },
   ];
 

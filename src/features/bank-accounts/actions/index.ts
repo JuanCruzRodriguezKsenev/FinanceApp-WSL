@@ -1,6 +1,6 @@
 "use server";
 
-import { Result, ok, err, internalError } from "../../../shared/lib/result";
+import { Result, ok, err, internalError, conflictError } from "../../../shared/lib/result";
 import { logger } from "../../../shared/lib/logger";
 import { validateSchema } from "../../../shared/lib/validators";
 import { CircuitBreakerFactory, CircuitBreakerOpenError } from "../../../shared/lib/circuit-breaker";
@@ -71,23 +71,30 @@ export async function addBankAccount(input: unknown): Promise<Result<any>> {
 
     const errorMessage = error.message || "";
     const errorDetail = error.detail || "";
+    const errorCause = (error.cause as any);
+    const errorCauseMessage = errorCause?.message || "";
+    const errorCauseCode = errorCause?.code || "";
     
-    // Detección mejorada de duplicados (Postgres code 23505)
+    const fullErrorSearch = `${errorMessage} ${errorDetail} ${errorCauseMessage} ${errorCauseCode}`.toLowerCase();
+    
+    // Detección mejorada de duplicados (Postgres code 23505 o keywords)
     if (
       error.code === "23505" || 
-      errorMessage.toLowerCase().includes("unique") || 
-      errorDetail.toLowerCase().includes("already exists") ||
-      errorMessage.toLowerCase().includes("already exists") ||
-      errorMessage.toLowerCase().includes("duplicate")
+      errorCauseCode === "23505" ||
+      fullErrorSearch.includes("unique constraint") || 
+      fullErrorSearch.includes("already exists") ||
+      fullErrorSearch.includes("duplicate")
     ) { 
-      return err(internalError(baDict.uniqueCbuError || "A bank account with this CBU already exists"));
+      return err(conflictError(baDict.uniqueCbuError || "A bank account with this CBU already exists", "cbu"));
     }
 
     // Si nada de lo anterior coincide, devolvemos el detalle técnico para el frontend (SOLO EN DESARROLLO/DEBUG)
     return err(internalError(baDict.errorMessage || "An error occurred while adding the bank account", { 
       technical: errorMessage,
       detail: errorDetail,
-      dbCode: error.code
+      cause: errorCauseMessage,
+      dbCode: error.code || errorCauseCode
     }));
+
   }
 }

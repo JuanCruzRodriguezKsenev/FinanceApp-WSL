@@ -1,6 +1,6 @@
 "use server";
 
-import { Result, ok, err, internalError } from "../../../shared/lib/result";
+import { Result, ok, err, internalError, conflictError } from "../../../shared/lib/result";
 import { logger } from "../../../shared/lib/logger";
 import { validateSchema } from "../../../shared/lib/validators";
 import { CircuitBreakerFactory, CircuitBreakerOpenError } from "../../../shared/lib/circuit-breaker";
@@ -61,12 +61,32 @@ export async function createTransaction(input: unknown): Promise<Result<any>> {
     console.error(">>> DB ERROR DEBUG (TRANSACTIONS) <<<", error);
     
     const errorMessage = error.message || "";
+    const errorDetail = error.detail || "";
+    const errorCause = (error.cause as any);
+    const errorCauseMessage = errorCause?.message || "";
+    const errorCauseCode = errorCause?.code || "";
+    
+    const fullErrorSearch = `${errorMessage} ${errorDetail} ${errorCauseMessage} ${errorCauseCode}`.toLowerCase();
+
     if (error instanceof CircuitBreakerOpenError) {
       return err(internalError(dict.transactions.errorMessage, { circuitStatus: "OPEN" }));
     }
+
+    if (
+      error.code === "23505" || 
+      errorCauseCode === "23505" ||
+      fullErrorSearch.includes("unique constraint") || 
+      fullErrorSearch.includes("already exists") ||
+      fullErrorSearch.includes("duplicate")
+    ) { 
+      return err(conflictError(dict.transactions.uniqueCbuError || "A transaction with this CBU already exists", "cbu"));
+    }
+
     return err(internalError(dict.transactions.errorMessage, { 
-      details: errorMessage,
-      dbCode: error.code
+      technical: errorMessage,
+      detail: errorDetail,
+      cause: errorCauseMessage,
+      dbCode: error.code || errorCauseCode
     }));
   }
 }

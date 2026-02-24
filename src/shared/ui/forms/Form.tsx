@@ -1,6 +1,9 @@
 "use client";
 
 import { ComponentProps,ReactNode } from "react";
+import { AppError } from "../../lib/result";
+import { Alert } from "../feedback/Alert";
+
 
 // Importaciones corregidas (ajusta según tu estructura real)
 import Button from "./Button";
@@ -35,6 +38,10 @@ interface FormProps extends Omit<
   cancelLabel?: string;
   /** Callback cuando se presiona cancelar */
   onCancel?: () => void;
+  /** Error opcional a mostrar en un Alert sobre los botones */
+  error?: AppError | null;
+  /** Título opcional para el Alert de error */
+  errorTitle?: string;
   /** Clases CSS adicionales */
   className?: string;
 }
@@ -60,6 +67,8 @@ function Form({
   submitClassName,
   cancelLabel = "Cancelar",
   onCancel,
+  error,
+  errorTitle,
   className,
   ...props
 }: FormProps) {
@@ -71,7 +80,19 @@ function Form({
     >
       <div className={styles.fields}>{children}</div>
 
+      {error && (
+        <div style={{ marginBottom: "1rem" }}>
+          <Alert 
+            type="error" 
+            title={errorTitle || (error.type === "CONFLICT_ERROR" ? "¡Atención!" : "Error")}
+          >
+            {error.message}
+          </Alert>
+        </div>
+      )}
+
       <div className={styles.footer}>
+
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
             {cancelLabel}

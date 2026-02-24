@@ -24,7 +24,12 @@ export function BankAccountForm({ dict }: { dict: Dictionary["bankAccounts"] }) 
   return (
     <Card>
       <h3>{dict.title}</h3>
-      <Form action={formAction} submitLabel={dict.submitButton}>
+      <Form 
+        action={formAction} 
+        submitLabel={dict.submitButton}
+        error={state?.isErr ? state.error : null}
+        errorTitle={state?.isErr && state.error.type !== "CONFLICT_ERROR" ? dict.errorMessage : undefined}
+      >
         <Input 
           id="cbu" 
           name="cbu" 
@@ -51,12 +56,6 @@ export function BankAccountForm({ dict }: { dict: Dictionary["bankAccounts"] }) 
           error={state?.isErr && state.error.field === "bankName" ? state.error.message : undefined}
           required 
         />
-
-        {state?.isOk === false && (
-          <Alert type="error" title={dict.errorMessage}>
-            {state.error.message}
-          </Alert>
-        )}
 
         {state?.isOk === true && (
           <Alert type="success" title={dict.successMessage}>

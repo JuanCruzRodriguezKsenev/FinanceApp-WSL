@@ -8,6 +8,7 @@ export type AppErrorType =
   | "DATABASE_ERROR"
   | "AUTHORIZATION_ERROR"
   | "NOT_FOUND_ERROR"
+  | "CONFLICT_ERROR"
   | "NETWORK_ERROR"
   | "INTERNAL_ERROR";
 
@@ -131,6 +132,19 @@ export const notFoundError = (message: string = "Recurso no encontrado"): AppErr
   return {
     type: "NOT_FOUND_ERROR",
     message,
+  };
+};
+
+/**
+ * Crea un AppError de conflicto (409).
+ * Útil para duplicados en la base de datos.
+ */
+export const conflictError = (message: string, field?: string): AppError => {
+  logger.warn({ type: "CONFLICT_ERROR", field }, message);
+  return {
+    type: "CONFLICT_ERROR",
+    message,
+    field,
   };
 };
 

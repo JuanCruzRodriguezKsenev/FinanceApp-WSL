@@ -10,6 +10,10 @@ vi.mock('next/headers', () => ({
   })),
 }));
 
+vi.mock('next/cache', () => ({
+  revalidatePath: vi.fn(),
+}));
+
 vi.mock('../../../shared/lib/i18n/getDictionary', () => ({
   getDictionary: vi.fn(async () => ({
     bankAccounts: {

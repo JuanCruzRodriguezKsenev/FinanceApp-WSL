@@ -18,7 +18,11 @@
     "tableAmount": "Monto",
     "tableCbu": "CBU",
     "tableStatus": "Estado",
-    "tableDate": "Fecha"
+    "tableDate": "Fecha",
+    "statusCompleted": "Completada",
+    "statusPending": "Pendiente",
+    "statusFailed": "Fallida",
+    "uniqueCbuError": "Esta transacción ya fue procesada"
   },
   "bankAccounts": {
     "title": "Cuentas Bancarias",

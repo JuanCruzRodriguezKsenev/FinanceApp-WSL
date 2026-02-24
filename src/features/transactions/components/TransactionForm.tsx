@@ -23,7 +23,12 @@ export function TransactionForm({ dict }: { dict: Dictionary["transactions"] }) 
 
   return (
     <Card>
-      <Form action={formAction} submitLabel={dict.submitButton}>
+      <Form 
+        action={formAction} 
+        submitLabel={dict.submitButton}
+        error={state?.isErr ? state.error : null}
+        errorTitle={state?.isErr && state.error.type !== "CONFLICT_ERROR" ? `⚠️ ${dict.errorTitle} (${state.error.type})` : undefined}
+      >
         <Input 
           id="amount"
           name="amount"
@@ -53,16 +58,6 @@ export function TransactionForm({ dict }: { dict: Dictionary["transactions"] }) 
           error={state?.isErr && state.error.field === "description" ? state.error.message : undefined}
         />
 
-        {state?.isErr && (
-          <Alert 
-            type="error" 
-            title={`⚠️ ${dict.errorTitle} (${state.error.type})`}
-            details={state.error.details?.circuitStatus ? `CIRCUIT_BREAKER_STATE: ${state.error.details.circuitStatus}` : undefined}
-          >
-            <p>{state.error.message}</p>
-          </Alert>
-        )}
-        
         {state?.isOk && (
           <Alert type="success" title={`✅ ${dict.successCardTitle}`}>
             <pre style={{ margin: 0, fontSize: "0.8em", overflowX: "auto" }}>

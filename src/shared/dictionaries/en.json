@@ -18,7 +18,11 @@
     "tableAmount": "Amount",
     "tableCbu": "CBU",
     "tableStatus": "Status",
-    "tableDate": "Date"
+    "tableDate": "Date",
+    "statusCompleted": "Completed",
+    "statusPending": "Pending",
+    "statusFailed": "Failed",
+    "uniqueCbuError": "This transaction was already processed"
   },
   "bankAccounts": {
     "title": "Bank Accounts",

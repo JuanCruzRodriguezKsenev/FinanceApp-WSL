@@ -24,7 +24,12 @@ export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"]
   return (
     <Card>
       <h3>{dict.title}</h3>
-      <Form action={formAction} submitLabel={dict.submitButton}>
+      <Form 
+        action={formAction} 
+        submitLabel={dict.submitButton}
+        error={state?.isErr ? state.error : null}
+        errorTitle={state?.isErr && state.error.type !== "CONFLICT_ERROR" ? dict.errorMessage : undefined}
+      >
         <Input 
           id="cvu" 
           name="cvu" 
@@ -42,12 +47,6 @@ export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"]
           error={state?.isErr && state.error.field === "provider" ? state.error.message : undefined}
           required 
         />
-
-        {state?.isOk === false && (
-          <Alert type="error" title={dict.errorMessage}>
-            {state.error.message}
-          </Alert>
-        )}
 
         {state?.isOk === true && (
           <Alert type="success" title={dict.successMessage}>
