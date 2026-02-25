@@ -96,5 +96,41 @@
     "allocateTitle": "Destinar Dinero",
     "allocateButton": "Ahorrar",
     "emptyMessage": "No tienes objetivos definidos"
+  },
+  "wealth": {
+    "title": "Gestión Patrimonial",
+    "assetsTitle": "Activos Fijos e Inversiones",
+    "liabilitiesTitle": "Pasivos y Deudas",
+    "creditCardsTitle": "Tarjetas de Crédito",
+    "assetName": "Nombre del Activo",
+    "assetType": "Tipo de Activo",
+    "assetValue": "Valor Estimado",
+    "assetCurrency": "Moneda",
+    "assetTicker": "Ticker (Opcional)",
+    "liabilityName": "Nombre de la Deuda",
+    "liabilityType": "Tipo de Deuda",
+    "liabilityAmount": "Monto Adeudado",
+    "cardName": "Nombre Tarjeta",
+    "cardBank": "Banco Emisor",
+    "cardLimit": "Límite de Crédito",
+    "cardClosing": "Día de Cierre",
+    "cardDue": "Día de Vencimiento",
+    "cardBalance": "Gasto Actual",
+    "cardAutoDebit": "Autodebito",
+    "submitAsset": "Añadir Activo",
+    "submitLiability": "Añadir Deuda",
+    "submitCard": "Añadir Tarjeta",
+    "successAsset": "Activo añadido correctamente",
+    "successLiability": "Deuda registrada correctamente",
+    "successCard": "Tarjeta añadida correctamente",
+    "types": {
+      "REAL_ESTATE": "Inmueble",
+      "STOCKS": "Acciones/Cedears",
+      "CASH": "Efectivo Físico",
+      "CRYPTO": "Criptomonedas",
+      "OTHER": "Otro",
+      "PERSONAL_LOAN": "Préstamo Personal",
+      "MORTGAGE": "Hipoteca"
+    }
   }
 }

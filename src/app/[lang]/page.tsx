@@ -10,6 +10,10 @@ import { DigitalWalletForm } from "../../features/digital-wallets/components/Dig
 import { DigitalWalletList } from "../../features/digital-wallets/components/DigitalWalletList";
 import { ContactForm } from "../../features/contacts/components/ContactForm";
 import { ContactList } from "../../features/contacts/components/ContactList";
+import { AssetForm } from "../../features/wealth/components/AssetForm";
+import { LiabilityForm } from "../../features/wealth/components/LiabilityForm";
+import { CreditCardForm } from "../../features/wealth/components/CreditCardForm";
+import { WealthList } from "../../features/wealth/components/WealthList";
 import { GoalForm } from "../../features/goals/components/GoalForm";
 import { GoalList } from "../../features/goals/components/GoalList";
 import { 
@@ -130,6 +134,21 @@ export default async function Home({
                   <GoalList dict={dict.goals} />
                 </Suspense>
               </div>
+            </section>
+            
+            {/* SECCIÓN WEALTH */}
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>{dict.wealth.title}</h2>
+              <Flex gap={4} direction="column">
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+                  <AssetForm dict={dict.wealth} />
+                  <LiabilityForm dict={dict.wealth} />
+                  <CreditCardForm dict={dict.wealth} />
+                </div>
+                <Suspense fallback={<p>Cargando patrimonio...</p>}>
+                  <WealthList dict={dict.wealth} />
+                </Suspense>
+              </Flex>
             </section>
           </div>
         </Flex>

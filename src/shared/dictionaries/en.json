@@ -96,5 +96,41 @@
     "allocateTitle": "Allocate Money",
     "allocateButton": "Save",
     "emptyMessage": "No goals defined yet"
+  },
+  "wealth": {
+    "title": "Wealth Management",
+    "assetsTitle": "Fixed Assets & Investments",
+    "liabilitiesTitle": "Liabilities & Debt",
+    "creditCardsTitle": "Credit Cards",
+    "assetName": "Asset Name",
+    "assetType": "Asset Type",
+    "assetValue": "Estimated Value",
+    "assetCurrency": "Currency",
+    "assetTicker": "Ticker Symbol (Optional)",
+    "liabilityName": "Debt Name",
+    "liabilityType": "Debt Type",
+    "liabilityAmount": "Amount Owed",
+    "cardName": "Card Name",
+    "cardBank": "Issuing Bank",
+    "cardLimit": "Credit Limit",
+    "cardClosing": "Closing Day",
+    "cardDue": "Due Day",
+    "cardBalance": "Current Balance",
+    "cardAutoDebit": "Auto Debit",
+    "submitAsset": "Add Asset",
+    "submitLiability": "Add Debt",
+    "submitCard": "Add Card",
+    "successAsset": "Asset added successfully",
+    "successLiability": "Debt registered successfully",
+    "successCard": "Card added successfully",
+    "types": {
+      "REAL_ESTATE": "Real Estate",
+      "STOCKS": "Stocks",
+      "CASH": "Physical Cash",
+      "CRYPTO": "Cryptocurrency",
+      "OTHER": "Other",
+      "PERSONAL_LOAN": "Personal Loan",
+      "MORTGAGE": "Mortgage"
+    }
   }
 }
