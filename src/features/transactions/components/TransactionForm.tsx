@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createTransaction } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Card, Input, Alert, Form, Select, Flex } from "../../../shared/ui";
+import { Card, Input, Alert, Form, Select, Flex, RadioGroup } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
 
@@ -59,7 +59,7 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
             />
           </div>
           <div style={{ flex: 1 }}>
-            <Select id="currency" name="currency" label="Moneda">
+            <Select id="currency" name="currency" label={dict.currencyLabel}>
               <option value="ARS">ARS</option>
               <option value="USD">USD</option>
             </Select>
@@ -69,12 +69,12 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
         <Select 
           id="sourceAccountId" 
           name="sourceAccountId" 
-          label="Cuenta Origen"
+          label={dict.sourceAccountLabel}
           value={sourceAccountId}
           onChange={(e) => setSourceAccountId(e.target.value)}
           required
         >
-          <option value="">Seleccionar origen</option>
+          <option value="">{dict.selectSource}</option>
           {allOwnAccounts.map(acc => (
             <option key={acc.id} value={acc.id}>{acc.name}</option>
           ))}
@@ -83,32 +83,17 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
         <hr style={{ margin: '1rem 0', opacity: 0.1 }} />
 
         <div style={{ marginBottom: '1rem' }}>
-          <label style={{ fontSize: 'var(--font-size-sm)', fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>
-            Destino
-          </label>
-          <Flex gap={2}>
-            <button 
-              type="button" 
-              onClick={() => setDestinationType("manual")}
-              style={{ padding: '4px 12px', borderRadius: '4px', border: '1px solid var(--border-color)', background: destinationType === 'manual' ? 'var(--color-primary)' : 'transparent', color: destinationType === 'manual' ? 'white' : 'inherit', fontSize: '0.8rem', cursor: 'pointer' }}
-            >
-              Manual
-            </button>
-            <button 
-              type="button" 
-              onClick={() => setDestinationType("contact")}
-              style={{ padding: '4px 12px', borderRadius: '4px', border: '1px solid var(--border-color)', background: destinationType === 'contact' ? 'var(--color-primary)' : 'transparent', color: destinationType === 'contact' ? 'white' : 'inherit', fontSize: '0.8rem', cursor: 'pointer' }}
-            >
-              Contacto
-            </button>
-            <button 
-              type="button" 
-              onClick={() => setDestinationType("own")}
-              style={{ padding: '4px 12px', borderRadius: '4px', border: '1px solid var(--border-color)', background: destinationType === 'own' ? 'var(--color-primary)' : 'transparent', color: destinationType === 'own' ? 'white' : 'inherit', fontSize: '0.8rem', cursor: 'pointer' }}
-            >
-              Mis Cuentas
-            </button>
-          </Flex>
+          <RadioGroup 
+            label={dict.destinationLabel}
+            name="destinationType"
+            value={destinationType}
+            onChange={(val) => setDestinationType(val as any)}
+            options={[
+              { value: "manual", label: dict.destManual },
+              { value: "contact", label: dict.destContact },
+              { value: "own", label: dict.destOwn }
+            ]} 
+          />
         </div>
 
         {destinationType === "manual" && (
@@ -127,10 +112,10 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
           <Select 
             id="destinationAccountId" 
             name="destinationAccountId" 
-            label="Cuenta Destino"
+            label={dict.destAccountLabel || "Cuenta Destino"}
             required
           >
-            <option value="">Seleccionar destino</option>
+            <option value="">{dict.selectDestination || "Seleccionar destino"}</option>
             {allOwnAccounts.filter(acc => acc.id !== sourceAccountId).map(acc => (
               <option key={acc.id} value={acc.id}>{acc.name}</option>
             ))}
@@ -142,12 +127,12 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
             <Select 
               id="contactId" 
               name="contactId" 
-              label="Seleccionar Contacto"
+              label={dict.selectContactLabel || "Seleccionar Contacto"}
               value={selectedContactId}
               onChange={(e) => setSelectedContactId(e.target.value)}
               required
             >
-              <option value="">Buscar contacto...</option>
+              <option value="">{dict.searchContact || "Buscar contacto..."}</option>
               {contacts.map(c => (
                 <option key={c.id} value={c.id}>{c.name} {c.alias ? `(${c.alias})` : ''}</option>
               ))}
@@ -157,7 +142,7 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
               <Select 
                 id="cbu" 
                 name="cbu" 
-                label="Cuenta del Contacto"
+                label={dict.contactAccountLabel || "Cuenta del Contacto"}
                 required
               >
                 {selectedContact.methods.map((m: any) => (

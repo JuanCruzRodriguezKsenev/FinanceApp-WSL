@@ -63,12 +63,12 @@ export function BankAccountForm({ dict }: { dict: Dictionary["bankAccounts"] }) 
               id="balance" 
               name="balance" 
               type="number" 
-              label="Saldo Inicial"
+              label={dict.initialBalanceLabel}
               defaultValue="0"
             />
           </div>
           <div style={{ flex: 1 }}>
-            <Select id="currency" name="currency" label="Moneda">
+            <Select id="currency" name="currency" label={dict.currencyLabel}>
               <option value="ARS">ARS</option>
               <option value="USD">USD</option>
             </Select>

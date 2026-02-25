@@ -21,10 +21,7 @@ const dbBreaker = CircuitBreakerFactory.database("goals-db");
 export async function getGoals(): Promise<Result<any[]>> {
   try {
     const result = await dbBreaker.execute(async () => {
-      return await db.query.financialTargets.findMany({
-        where: eq(financialTargets.isActive, true),
-        orderBy: [desc(financialTargets.createdAt)]
-      });
+      return await db.select().from(financialTargets).where(eq(financialTargets.isActive, true)).orderBy(desc(financialTargets.createdAt));
     });
     return ok(result);
   } catch (error: any) {

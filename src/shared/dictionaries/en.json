@@ -22,7 +22,19 @@
     "statusCompleted": "Completed",
     "statusPending": "Pending",
     "statusFailed": "Failed",
-    "uniqueCbuError": "This transaction was already processed"
+    "uniqueCbuError": "This transaction was already processed",
+    "destinationLabel": "Destination",
+    "destManual": "Manual",
+    "destContact": "Contact",
+    "destOwn": "My Accounts",
+    "destAccountLabel": "Destination Account",
+    "selectDestination": "Select destination",
+    "selectContactLabel": "Select Contact",
+    "searchContact": "Search contact...",
+    "contactAccountLabel": "Contact's Account",
+    "sourceAccountLabel": "Source Account",
+    "currencyLabel": "Currency",
+    "selectSource": "Select source"
   },
   "bankAccounts": {
     "title": "Bank Accounts",
@@ -34,7 +46,9 @@
     "errorMessage": "Error adding bank account",
     "uniqueCbuError": "An account with this CBU already exists",
     "tableAlias": "Alias",
-    "tableBank": "Bank"
+    "tableBank": "Bank",
+    "initialBalanceLabel": "Initial Balance",
+    "currencyLabel": "Currency"
   },
   "digitalWallets": {
     "title": "Digital Wallets",
@@ -44,7 +58,9 @@
     "successMessage": "Wallet linked successfully",
     "errorMessage": "Error linking wallet",
     "uniqueCvuError": "This wallet is already linked",
-    "tableProvider": "Provider"
+    "tableProvider": "Provider",
+    "initialBalanceLabel": "Initial Balance",
+    "currencyLabel": "Currency"
   },
   "language": {
     "switch": "Switch language",

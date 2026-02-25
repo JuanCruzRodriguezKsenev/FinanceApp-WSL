@@ -31,7 +31,9 @@ export default function FormField({
           {required && <span className={styles.required}> *</span>}
         </label>
       )}
+
       {children}
+
       {error && (
         <span className={styles.errorText} id={errorId}>
           {error}

@@ -26,10 +26,14 @@
   --bg-base: #ffffff;
   --bg-surface: #f9fafb;
   --bg-input: #ffffff;
+  --bg-primary: #ffffff;
   --border-color: #e5e7eb;
   
   --text-base: #111827;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
   --text-muted: #6b7280;
+  --text-inverse: #ffffff;
 
   --success-bg: #dcfce7;
   --success-border: #22c55e;
@@ -87,10 +91,14 @@
   --bg-base: #111827;
   --bg-surface: #1f2937;
   --bg-input: #374151;
+  --bg-primary: #1f2937;
   --border-color: #4b5563;
   
   --text-base: #f9fafb;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
   --text-muted: #9ca3af;
+  --text-inverse: #111827;
 
   --success-bg: rgba(22, 101, 52, 0.2);
   --success-border: #166534;

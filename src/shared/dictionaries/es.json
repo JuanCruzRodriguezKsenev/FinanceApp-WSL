@@ -22,7 +22,19 @@
     "statusCompleted": "Completada",
     "statusPending": "Pendiente",
     "statusFailed": "Fallida",
-    "uniqueCbuError": "Esta transacción ya fue procesada"
+    "uniqueCbuError": "Esta transacción ya fue procesada",
+    "destinationLabel": "Destino",
+    "destManual": "Manual",
+    "destContact": "Contacto",
+    "destOwn": "Mis Cuentas",
+    "destAccountLabel": "Cuenta Destino",
+    "selectDestination": "Seleccionar destino",
+    "selectContactLabel": "Seleccionar Contacto",
+    "searchContact": "Buscar contacto...",
+    "contactAccountLabel": "Cuenta del Contacto",
+    "sourceAccountLabel": "Cuenta Origen",
+    "currencyLabel": "Moneda",
+    "selectSource": "Seleccionar origen"
   },
   "bankAccounts": {
     "title": "Cuentas Bancarias",
@@ -34,7 +46,9 @@
     "errorMessage": "Error al agregar la cuenta bancaria",
     "uniqueCbuError": "Ya existe una cuenta con este CBU",
     "tableAlias": "Alias",
-    "tableBank": "Banco"
+    "tableBank": "Banco",
+    "initialBalanceLabel": "Saldo Inicial",
+    "currencyLabel": "Moneda"
   },
   "digitalWallets": {
     "title": "Billeteras Digitales",
@@ -44,7 +58,9 @@
     "successMessage": "Billetera vinculada exitosamente",
     "errorMessage": "Error al vincular la billetera",
     "uniqueCvuError": "Esta billetera ya está vinculada",
-    "tableProvider": "Proveedor"
+    "tableProvider": "Proveedor",
+    "initialBalanceLabel": "Saldo Inicial",
+    "currencyLabel": "Moneda"
   },
   "language": {
     "switch": "Cambiar idioma",

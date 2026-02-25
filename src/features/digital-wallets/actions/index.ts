@@ -26,7 +26,7 @@ export async function getDigitalWallets(): Promise<Result<any[]>> {
         provider: digitalWallets.provider,
         balance: digitalWallets.balance,
         currency: digitalWallets.currency,
-        locked: sql<string>`coalesce((select sum(current_amount) from ${financialTargets} where ${financialTargets.digitalWalletId} = ${digitalWallets.id}), 0)`
+        locked: sql<string>`(SELECT COALESCE(SUM(${financialTargets.currentAmount}), 0) FROM ${financialTargets} WHERE ${financialTargets.digitalWalletId} = ${digitalWallets.id})`
       })
       .from(digitalWallets)
       .where(eq(digitalWallets.isActive, true))

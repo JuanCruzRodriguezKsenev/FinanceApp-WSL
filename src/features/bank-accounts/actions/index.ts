@@ -27,7 +27,7 @@ export async function getBankAccounts(): Promise<Result<any[]>> {
         bankName: bankAccounts.bankName,
         balance: bankAccounts.balance,
         currency: bankAccounts.currency,
-        locked: sql<string>`coalesce((select sum(current_amount) from ${financialTargets} where ${financialTargets.bankAccountId} = ${bankAccounts.id}), 0)`
+        locked: sql<string>`(SELECT COALESCE(SUM(${financialTargets.currentAmount}), 0) FROM ${financialTargets} WHERE ${financialTargets.bankAccountId} = ${bankAccounts.id})`
       })
       .from(bankAccounts)
       .where(eq(bankAccounts.isActive, true))

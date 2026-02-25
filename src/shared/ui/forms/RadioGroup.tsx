@@ -15,6 +15,8 @@ interface RadioGroupProps {
   name: string;
   options: RadioOption[];
   defaultValue?: string | number;
+  value?: string | number;
+  onChange?: (value: string | number) => void;
   label?: string;
   required?: boolean;
   error?: string;
@@ -25,6 +27,8 @@ export default function RadioGroup({
   name,
   options,
   defaultValue,
+  value,
+  onChange,
   label,
   required,
   error,
@@ -62,6 +66,8 @@ export default function RadioGroup({
               name={name}
               value={opt.value}
               defaultChecked={defaultValue === opt.value}
+              checked={value !== undefined ? value === opt.value : undefined}
+              onChange={() => onChange?.(opt.value)}
               required={required}
               aria-label={opt.label}
             />
@@ -69,6 +75,7 @@ export default function RadioGroup({
           </label>
         ))}
       </div>
+
       {error && (
         <span className={styles.errorText} id={errorId}>
           {error}
