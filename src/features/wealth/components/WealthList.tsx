@@ -47,17 +47,12 @@ export async function WealthList({ dict }: { dict: Dictionary["wealth"] }) {
     <div className={styles.wealthContainer}>
       <div>
         <h3 className={styles.tableTitle}>{dict.assetsTitle}</h3>
-        <Table data={assets} columns={assetColumns} emptyMessage="No assets registered" />
+        <Table data={assets} columns={assetColumns} emptyMessage="No assets registered" filterable filterPlaceholder="Buscar activo..." />
       </div>
 
       <div>
         <h3 className={styles.tableTitle}>{dict.liabilitiesTitle}</h3>
-        <Table data={liabilities} columns={liabilityColumns} emptyMessage="No liabilities registered" />
-      </div>
-
-      <div>
-        <h3 className={styles.tableTitle}>{dict.creditCardsTitle}</h3>
-        <Table data={creditCards} columns={cardColumns} emptyMessage="No credit cards registered" />
+        <Table data={liabilities} columns={liabilityColumns} emptyMessage="No liabilities registered" filterable filterPlaceholder="Buscar deuda..." />
       </div>
     </div>
   );

@@ -1,0 +1,41 @@
+.header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.settingsCard {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 600px;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settingRow:last-child {
+  border-bottom: none;
+}
+
+.settingInfo h3 {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.settingInfo p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}

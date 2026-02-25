@@ -72,7 +72,8 @@
     "transactions": "Transacciones",
     "accounts": "Cuentas y Metas",
     "wealth": "Patrimonio",
-    "contacts": "Contactos"
+    "contacts": "Contactos",
+    "settings": "Configuración"
   },
   "contacts": {
     "title": "Contactos",
@@ -113,7 +114,7 @@
     "assetType": "Tipo de Activo",
     "assetValue": "Valor Estimado",
     "assetCurrency": "Moneda",
-    "assetTicker": "Ticker (Opcional)",
+    "assetTicker": "Ticker",
     "liabilityName": "Nombre de la Deuda",
     "liabilityType": "Tipo de Deuda",
     "liabilityAmount": "Monto Adeudado",

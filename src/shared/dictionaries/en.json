@@ -72,7 +72,8 @@
     "transactions": "Transactions",
     "accounts": "Accounts & Goals",
     "wealth": "Wealth",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "settings": "Settings"
   },
   "contacts": {
     "title": "Contacts",
@@ -113,7 +114,7 @@
     "assetType": "Asset Type",
     "assetValue": "Estimated Value",
     "assetCurrency": "Currency",
-    "assetTicker": "Ticker Symbol (Optional)",
+    "assetTicker": "Ticker Symbol",
     "liabilityName": "Debt Name",
     "liabilityType": "Debt Type",
     "liabilityAmount": "Amount Owed",

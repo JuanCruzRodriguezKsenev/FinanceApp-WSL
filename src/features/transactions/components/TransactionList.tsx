@@ -44,6 +44,8 @@ export async function TransactionList({ dict }: { dict: Dictionary["transactions
       data={result.value} 
       columns={columns} 
       emptyMessage="No transactions yet"
+      filterable
+      filterPlaceholder="Filtrar transacciones..."
     />
   );
 }

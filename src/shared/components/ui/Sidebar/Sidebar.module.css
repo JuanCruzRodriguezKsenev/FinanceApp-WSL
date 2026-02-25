@@ -11,7 +11,45 @@
 }
 
 .header {
-  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-sm);
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.userEmail {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
 }
 
 .brand {

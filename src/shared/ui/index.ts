@@ -12,6 +12,7 @@ export { default as Form } from "./forms/Form";
 export { default as Card } from "./layout/Card";
 export { Container } from "./layout/Container";
 export * from "./layout/Navbar";
+export { Tabs } from "./layout/Tabs/Tabs";
 
 export { Alert } from "./feedback/Alert";
 export { default as Dialog } from "./feedback/Dialog";

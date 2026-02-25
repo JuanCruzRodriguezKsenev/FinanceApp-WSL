@@ -18,7 +18,18 @@
 - [ ] Extender DAL al resto de entidades (`bank-accounts`, `digital-wallets`, `contacts`, `goals`).
 
 [PHASE 5 - UX & LAYOUT REFACTOR]
-- [ ] Refactorizar Navbar a Sidebar fijo en Layout.
-- [ ] Dividir `page.tsx` en múltiples rutas: `/transactions`, `/wealth`, `/contacts`, `/accounts`.
-- [ ] Purgar `<Flex>` component y estilos en línea de todas las features.
-- [ ] Mejorar el componente `Table.tsx` para aceptar `rowActions` y `filters`.
+- [x] Refactorizar Navbar a Sidebar fijo en Layout.
+- [x] Dividir `page.tsx` en múltiples rutas: `/transactions`, `/wealth`, `/contacts`, `/accounts`.
+- [x] Purgar `<Flex>` component y estilos en línea de todas las features.
+- [x] Mejorar el componente `Table.tsx` para aceptar `rowActions`.
+
+[PHASE 6 - UX REFINEMENT & ADVANCED FLOWS]
+- [ ] Crear página dedicada para Metas y Objetivos (`/goals`).
+- [ ] Mover Tarjetas de Crédito a la página `/accounts` (junto a Bancos) separadas visualmente.
+- [ ] Implementar componente `Tabs` (Solapas) para dividir páginas en sub-secciones.
+- [ ] Añadir capacidad de Filtrado (Filter) a las tablas (ej: búsqueda por texto).
+- [ ] Mejorar UI de tablas vacías (Empty State con fondo y estructura en vez de solo texto).
+- [ ] Eliminar texto redundante "(Opcional)" del campo Ticker en `AssetForm` y diccionarios.
+- [ ] Crear página de Configuración (`/settings`) y mover allí los selectores de Idioma y Tema.
+- [ ] Añadir un "Placeholder de Usuario" en el Sidebar (preparación para Auth).
+- [ ] **Workflow de Transacciones**: Planificar e implementar estado de "Pendiente de Confirmación" para el receptor (Bandeja de entrada de transacciones).

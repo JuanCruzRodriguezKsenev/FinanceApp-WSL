@@ -1,8 +1,11 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useState } from "react";
 import styles from "./Table.module.css";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
 import TableCell from "./TableCell";
+import Input from "../forms/Input";
 
 interface Column<T> {
   key: keyof T;
@@ -21,6 +24,8 @@ interface Props<T> {
   striped?: boolean;
   hoverable?: boolean;
   className?: string;
+  filterable?: boolean;
+  filterPlaceholder?: string;
 }
 
 export default function Table<T extends { id?: string | number }>({
@@ -32,48 +37,79 @@ export default function Table<T extends { id?: string | number }>({
   striped = true,
   hoverable = true,
   className = "",
+  filterable = false,
+  filterPlaceholder = "Search...",
 }: Props<T>) {
+  const [filterText, setFilterText] = useState("");
+
+  const filteredData = filterable && filterText
+    ? data.filter((item) => 
+        columns.some((col) => {
+          const val = item[col.key];
+          if (val === null || val === undefined) return false;
+          return String(val).toLowerCase().includes(filterText.toLowerCase());
+        })
+      )
+    : data;
+
   if (data.length === 0) {
     return (
-      <div className={styles.empty}>
-        <p>{emptyMessage}</p>
+      <div className={styles.emptyContainer}>
+        <span className={styles.emptyIcon}>📂</span>
+        <p className={styles.emptyText}>{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className={`${styles.container} ${className}`}>
-      <table
-        className={`${styles.table} ${striped ? styles.striped : ""} ${
-          hoverable ? styles.hoverable : ""
-        }`}
-      >
-        <thead>
-          <tr className={styles.headerRow}>
-            {columns.map((column) => (
-              <TableHeader
-                key={String(column.key)}
-                align={column.align}
-                width={column.width}
-              >
-                {column.label}
-              </TableHeader>
-            ))}
-            {rowActions && (
-              <TableHeader align="right" width="100px">
-                Acciones
-              </TableHeader>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {renderRow
-            ? data.map((item, index) => (
+    <div className={className}>
+      {filterable && (
+        <div style={{ marginBottom: '1rem', maxWidth: '300px' }}>
+          <Input 
+            name="table_filter"
+            placeholder={filterPlaceholder}
+            value={filterText}
+            onChange={(e: any) => setFilterText(e.target.value)}
+          />
+        </div>
+      )}
+      <div className={styles.container}>
+        <table
+          className={`${styles.table} ${striped ? styles.striped : ""} ${
+            hoverable ? styles.hoverable : ""
+          }`}
+        >
+          <thead>
+            <tr className={styles.headerRow}>
+              {columns.map((column) => (
+                <TableHeader
+                  key={String(column.key)}
+                  align={column.align}
+                  width={column.width}
+                >
+                  {column.label}
+                </TableHeader>
+              ))}
+              {rowActions && (
+                <TableHeader align="right" width="100px">
+                  Acciones
+                </TableHeader>
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.length === 0 ? (
+              <tr>
+                <td colSpan={columns.length + (rowActions ? 1 : 0)} className={styles.cell} style={{ textAlign: 'center', padding: '2rem' }}>
+                  No matches found
+                </td>
+              </tr>
+            ) : (
+              (renderRow ? filteredData.map((item, index) => (
                 <TableRow key={item.id || index}>
                   {renderRow(item)}
                 </TableRow>
-              ))
-            : data.map((item, index) => (
+              )) : filteredData.map((item, index) => (
                 <TableRow key={item.id || index}>
                   {columns.map((column) => (
                     <TableCell
@@ -91,9 +127,11 @@ export default function Table<T extends { id?: string | number }>({
                     </TableCell>
                   )}
                 </TableRow>
-              ))}
-        </tbody>
-      </table>
+              )))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -16,8 +16,22 @@ Pasos específicos y ordenados por prioridad para corregir los hallazgos técnic
 1.  **Idempotencia**: Añadir middleware o lógica a la validación de transacciones que detecte payloads duplicados en ventanas de tiempo de 5 segundos.
 2.  **Auth.js v5**: Implementar esquema de autenticación (Identity Provider) forzando cookies `HttpOnly` y protección en `src/proxy.ts`.
 
-## Fase 5: UX & Layout Refactor (Descaotización)
+## Fase 5: UX & Layout Refactor (Descaotización) [COMPLETADA]
 1.  **Reorganización de Rutas**: Desacoplar el monstruoso `page.tsx` en páginas dedicadas por dominio (`/transactions`, `/wealth`, `/contacts`, `/accounts`). El Home quedará solo como un Dashboard resumen.
 2.  **Sidebar Navigation**: Refactorizar el Navbar problemático (falso sticky) hacia un Sidebar fijo en Desktop y Topbar en móvil.
 3.  **Purga de Componente `<Flex>`**: Eliminar el componente Flex y cualquier rastro de `style={{}}` remanente, moviendo el layouting a CSS Grid/Flex en los `.module.css`.
-4.  **Evolución de Tablas (CRUD UI)**: Actualizar el componente genérico `Table` para soportar `rowActions` (botones de eliminar/editar) y filtrado integrado.
+4.  **Evolución de Tablas (CRUD UI)**: Actualizar el componente genérico `Table` para soportar `rowActions` (botones de eliminar/editar).
+
+## Fase 6: UX Refinement & Flujos Avanzados
+1.  **Reestructuración Fina de Rutas**: 
+    *   Mover "Metas y Objetivos" a `/goals`.
+    *   Mover "Tarjetas de Crédito" a `/accounts`, usando un nuevo componente **Tabs** para separarlas visualmente de las cuentas bancarias.
+2.  **Settings y Perfil**:
+    *   Crear `/settings` para agrupar Theme y Language.
+    *   Añadir un componente de Usuario en el Sidebar (mock para futura integración Auth.js).
+3.  **Pulido Visual**:
+    *   Mejorar el componente `Table` para que tenga un estado vacío (Empty State) estructurado y un sistema de filtrado integrado.
+    *   Corregir redundancias en diccionarios (quitar "(Opcional)").
+4.  **Workflow de Transacciones (Bandeja de Entrada)**:
+    *   Evolucionar el sistema de transacciones para que, al enviar a un contacto interno, quede en estado "Pendiente". El receptor debe tener una vista para "Aceptar" o "Rechazar" el movimiento, previniendo duplicados o fraudes (Conciliación a dos puntas).
+

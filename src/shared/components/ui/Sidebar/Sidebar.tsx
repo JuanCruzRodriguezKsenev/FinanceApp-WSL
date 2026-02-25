@@ -27,12 +27,21 @@ export function Sidebar({ lang, dict }: SidebarProps) {
     { href: `/${lang}/accounts`, label: dict.accounts, icon: "🏦" },
     { href: `/${lang}/wealth`, label: dict.wealth, icon: "💎" },
     { href: `/${lang}/contacts`, label: dict.contacts, icon: "👥" },
+    { href: `/${lang}/settings`, label: dict.settings || "Settings", icon: "⚙️" },
   ];
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.header}>
         <div className={styles.brand}>FinanceApp</div>
+      </div>
+
+      <div className={styles.userProfile}>
+        <div className={styles.avatar}>U</div>
+        <div className={styles.userInfo}>
+          <div className={styles.userName}>Usuario Demo</div>
+          <div className={styles.userEmail}>demo@finance.app</div>
+        </div>
       </div>
 
       <nav className={styles.nav}>
@@ -47,13 +56,7 @@ export function Sidebar({ lang, dict }: SidebarProps) {
           </Link>
         ))}
       </nav>
-
-      <div className={styles.footer}>
-        <ThemeToggle variant="full" />
-        <div className={styles.langWrapper}>
-           <LanguageToggle currentLocale={lang} />
-        </div>
-      </div>
     </aside>
   );
 }
+

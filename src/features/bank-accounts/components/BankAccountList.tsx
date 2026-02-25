@@ -43,6 +43,8 @@ export async function BankAccountList({ dict }: { dict: Dictionary["bankAccounts
       data={result.value} 
       columns={columns} 
       emptyMessage="No bank accounts added"
+      filterable
+      filterPlaceholder="Buscar cuenta..."
     />
   );
 }

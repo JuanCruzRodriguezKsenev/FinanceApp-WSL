@@ -60,16 +60,32 @@
 }
 
 /* --- EMPTY STATE --- */
-.empty {
-  padding: var(--spacing-xl);
+.emptyContainer {
+  padding: var(--spacing-2xl);
   text-align: center;
   color: var(--text-secondary);
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
 }
 
-.empty p {
-  margin: 0;
-  font-size: 1rem;
+.emptyIcon {
+  font-size: 2rem;
+  opacity: 0.5;
 }
+
+.emptyText {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
 
 /* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
