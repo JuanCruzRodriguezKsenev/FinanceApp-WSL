@@ -1,6 +1,7 @@
 import { getContacts } from "../actions";
 import { Table, Badge } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
+import styles from "./ContactList.module.css";
 
 export async function ContactList({ dict }: { dict: Dictionary["contacts"] }) {
   const result = await getContacts();
@@ -16,7 +17,7 @@ export async function ContactList({ dict }: { dict: Dictionary["contacts"] }) {
       key: "methods" as const, 
       label: dict.title, 
       render: (methods: any[]) => (
-        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+        <div className={styles.methodsContainer}>
           {methods?.map((m, i) => (
             <Badge key={i} variant="secondary" size="sm">
               {m.type}: {m.value.slice(0, 4)}...

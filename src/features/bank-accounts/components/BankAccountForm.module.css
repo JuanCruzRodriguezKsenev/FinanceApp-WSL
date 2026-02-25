@@ -1,0 +1,21 @@
+.row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.col2 {
+  flex: 2;
+  min-width: 0;
+}
+
+.col1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.successData {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  overflow-x: auto;
+}

@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.col2 {
+  flex: 2;
+  min-width: 0;
+}
+
+.col1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.divider {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+.destinationWrapper {
+  margin-bottom: 1rem;
+}
+
+.successData {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  overflow-x: auto;
+}

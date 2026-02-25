@@ -6,6 +6,7 @@ import { useFormAction } from "../../../shared/hooks/useFormAction";
 import { Card, Input, Form, Select, Flex } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
+import styles from "./GoalForm.module.css";
 
 interface Props {
   dict: Dictionary["goals"];
@@ -48,23 +49,23 @@ export function GoalForm({ dict, accounts, wallets }: Props) {
           required 
         />
 
-        <Flex gap={4}>
-          <div style={{ flex: 1 }}>
+        <div className={styles.row}>
+          <div className={styles.col1}>
             <Select id="type" name="type" label={dict.typeLabel} required>
               <option value="GOAL">Objetivo</option>
               <option value="RESERVE">Reserva</option>
             </Select>
           </div>
-          <div style={{ flex: 1 }}>
+          <div className={styles.col1}>
             <Select id="currency" name="currency" label="Moneda">
               <option value="ARS">ARS</option>
               <option value="USD">USD</option>
             </Select>
           </div>
-        </Flex>
+        </div>
 
-        <Flex gap={4}>
-          <div style={{ flex: 1 }}>
+        <div className={styles.row}>
+          <div className={styles.col1}>
             <Input 
               id="targetAmount" 
               name="targetAmount" 
@@ -73,7 +74,7 @@ export function GoalForm({ dict, accounts, wallets }: Props) {
               required 
             />
           </div>
-          <div style={{ flex: 1 }}>
+          <div className={styles.col1}>
             <Input 
               id="deadline" 
               name="deadline" 
@@ -81,7 +82,7 @@ export function GoalForm({ dict, accounts, wallets }: Props) {
               label={dict.deadlineLabel}
             />
           </div>
-        </Flex>
+        </div>
 
         <Select id="bankAccountId" name="bankAccountId" label={dict.linkedAccountLabel}>
           <option value="">Cuenta vinculada (Opcional)</option>

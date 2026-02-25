@@ -2,6 +2,7 @@ import { getGoals } from "../actions";
 import { Table, Badge } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { QuickAllocate } from "./QuickAllocate";
+import styles from "./GoalList.module.css";
 
 export async function GoalList({ dict }: { dict: Dictionary["goals"] }) {
   const result = await getGoals();
@@ -27,12 +28,15 @@ export async function GoalList({ dict }: { dict: Dictionary["goals"] }) {
       render: (_: any, item: any) => {
         const progress = (Number(item.currentAmount) / Number(item.targetAmount)) * 100;
         return (
-          <div style={{ width: '120px' }}>
-            <div style={{ fontSize: '0.75rem', marginBottom: '2px' }}>
+          <div className={styles.progressContainer}>
+            <div className={styles.progressLabel}>
               {item.currency === 'USD' ? 'u$s' : '$'}{item.currentAmount} / {item.targetAmount}
             </div>
-            <div style={{ height: '6px', background: 'var(--bg-hover)', borderRadius: '3px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${Math.min(progress, 100)}%`, background: 'var(--color-primary)', transition: 'width 0.3s' }} />
+            <div className={styles.progressTrack}>
+              <div 
+                className={styles.progressBar} 
+                style={{ width: `${Math.min(progress, 100)}%` }} 
+              />
             </div>
           </div>
         );

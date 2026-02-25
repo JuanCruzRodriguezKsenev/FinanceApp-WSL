@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { allocateMoney } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Button, Input, Flex } from "../../../shared/ui";
+import { Button, Input } from "../../../shared/ui";
 import { useToast } from "@/contexts";
+import styles from "./QuickAllocate.module.css";
 
 export function QuickAllocate({ goalId, label }: { goalId: string, label: string }) {
   const { showToast } = useToast();
@@ -17,20 +18,19 @@ export function QuickAllocate({ goalId, label }: { goalId: string, label: string
   });
 
   return (
-    <form action={formAction}>
+    <form action={formAction} className={styles.form}>
       <input type="hidden" name="goalId" value={goalId} />
-      <Flex gap={2} align="center">
+      <div className={styles.input}>
         <Input 
           name="amount" 
           type="number" 
           value={amount}
           onChange={(e: any) => setAmount(e.target.value)}
           placeholder="0.00" 
-          style={{ width: '80px' }} 
           required 
         />
-        <Button type="submit" isLoading={isPending}>{label}</Button>
-      </Flex>
+      </div>
+      <Button type="submit" isLoading={isPending}>{label}</Button>
     </form>
   );
 }

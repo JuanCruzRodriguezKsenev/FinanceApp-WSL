@@ -6,6 +6,7 @@ import { useFormAction } from "../../../shared/hooks/useFormAction";
 import { Card, Input, Alert, Form, Flex, Select } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
+import styles from "./DigitalWalletForm.module.css";
 
 export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"] }) {
   const { showToast } = useToast();
@@ -48,8 +49,8 @@ export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"]
           required 
         />
 
-        <Flex gap={4}>
-          <div style={{ flex: 2 }}>
+        <div className={styles.row}>
+          <div className={styles.col2}>
             <Input 
               id="balance" 
               name="balance" 
@@ -58,17 +59,17 @@ export function DigitalWalletForm({ dict }: { dict: Dictionary["digitalWallets"]
               defaultValue="0"
             />
           </div>
-          <div style={{ flex: 1 }}>
+          <div className={styles.col1}>
             <Select id="currency" name="currency" label={dict.currencyLabel}>
               <option value="ARS">ARS</option>
               <option value="USD">USD</option>
             </Select>
           </div>
-        </Flex>
+        </div>
 
         {state?.isOk === true && (
           <Alert type="success" title={dict.successMessage}>
-            <pre style={{ fontSize: "0.8em" }}>{JSON.stringify(state.value, null, 2)}</pre>
+            <pre className={styles.successData}>{JSON.stringify(state.value, null, 2)}</pre>
           </Alert>
         )}
       </Form>

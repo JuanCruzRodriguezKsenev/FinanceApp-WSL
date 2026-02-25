@@ -1,6 +1,7 @@
 import { getTransactions } from "../actions";
 import { Table } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
+import styles from "./TransactionList.module.css";
 
 export async function TransactionList({ dict }: { dict: Dictionary["transactions"] }) {
   const result = await getTransactions();
@@ -17,9 +18,9 @@ export async function TransactionList({ dict }: { dict: Dictionary["transactions
       render: (val: string, item: any) => (
         <div>
           {item.contact ? (
-            <div style={{ fontWeight: 'bold' }}>{item.contact.name}</div>
+            <div className={styles.contactName}>{item.contact.name}</div>
           ) : null}
-          <div style={{ fontSize: '0.8rem', opacity: 0.7 }}>{val}</div>
+          <div className={styles.accountValue}>{val}</div>
         </div>
       )
     },

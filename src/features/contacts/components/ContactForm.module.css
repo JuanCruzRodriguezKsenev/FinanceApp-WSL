@@ -1,0 +1,21 @@
+.row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.col1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.col2 {
+  flex: 2;
+  min-width: 0;
+}
+
+.divider {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}

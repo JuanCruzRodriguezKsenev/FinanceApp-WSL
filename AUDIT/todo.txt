@@ -1,0 +1,21 @@
+# TODO Técnico - Auditoría de Arquitectura
+
+[HIGH PRIORITY - SECURITY]
+- [ ] Configurar Security Headers (CSP, HSTS, X-Content-Type-Options, Referrer-Policy, X-Frame-Options) en `next.config.ts`.
+- [ ] Implementar protección de Idempotencia en Server Actions (e.g. `createTransaction`).
+
+[HIGH PRIORITY - UI/UX DEBT]
+- [ ] Eliminar todos los atributos `style={{}}` en `TransactionForm.tsx`.
+- [ ] Eliminar todos los atributos `style={{}}` en `TransactionList.tsx`.
+- [ ] Eliminar todos los atributos `style={{}}` en `BankAccountForm.tsx` y `BankAccountList.tsx`.
+- [ ] Eliminar todos los atributos `style={{}}` en `DigitalWalletForm.tsx` y `DigitalWalletList.tsx`.
+- [ ] Eliminar todos los atributos `style={{}}` en `GoalForm.tsx`, `GoalList.tsx` y `QuickAllocate.tsx`.
+- [ ] Eliminar todos los atributos `style={{}}` en `ContactForm.tsx` y `ContactList.tsx`.
+
+[MEDIUM PRIORITY - ARCHITECTURE (DAL)]
+- [ ] Crear la capa DAL (Data Access Layer) en `src/features/transactions/data/repository.ts`.
+- [ ] Refactorizar `createTransaction` action para consumir el DAL en lugar de llamar a `db` directamente (manteniendo la transacción ACID).
+
+[UPCOMING FEATURES - POST AUDIT]
+- [ ] Instalar Auth.js v5 e implementar protección de identidades en `src/proxy.ts`.
+- [ ] Continuar con BACKEND_PLAN (Inmuebles, Deudas, Acciones).

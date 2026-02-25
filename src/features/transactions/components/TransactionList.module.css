@@ -1,0 +1,9 @@
+.contactName {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.accountValue {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}

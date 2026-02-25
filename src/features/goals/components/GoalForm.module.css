@@ -1,0 +1,10 @@
+.row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.col1 {
+  flex: 1;
+  min-width: 0;
+}

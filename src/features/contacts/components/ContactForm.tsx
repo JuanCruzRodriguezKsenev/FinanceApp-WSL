@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 import { createContact } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Card, Input, Form, Select, Flex } from "../../../shared/ui";
+import { Card, Input, Form, Select } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
+import styles from "./ContactForm.module.css";
 
 export function ContactForm({ dict }: { dict: Dictionary["contacts"] }) {
   const { showToast } = useToast();
@@ -38,27 +39,31 @@ export function ContactForm({ dict }: { dict: Dictionary["contacts"] }) {
           required 
         />
 
-        <Flex gap={4}>
-          <Input 
-            id="alias" 
-            name="alias" 
-            type="text" 
-            label={dict.aliasLabel}
-            error={state?.isErr && state.error.field === "alias" ? state.error.message : undefined}
-          />
-          <Input 
-            id="email" 
-            name="email" 
-            type="email" 
-            label={dict.emailLabel}
-            error={state?.isErr && state.error.field === "email" ? state.error.message : undefined}
-          />
-        </Flex>
+        <div className={styles.row}>
+          <div className={styles.col1}>
+            <Input 
+              id="alias" 
+              name="alias" 
+              type="text" 
+              label={dict.aliasLabel}
+              error={state?.isErr && state.error.field === "alias" ? state.error.message : undefined}
+            />
+          </div>
+          <div className={styles.col1}>
+            <Input 
+              id="email" 
+              name="email" 
+              type="email" 
+              label={dict.emailLabel}
+              error={state?.isErr && state.error.field === "email" ? state.error.message : undefined}
+            />
+          </div>
+        </div>
 
-        <hr style={{ margin: '1rem 0', opacity: 0.1 }} />
+        <hr className={styles.divider} />
 
-        <Flex gap={4} align="end">
-          <div style={{ flex: 1 }}>
+        <div className={styles.row} style={{ alignItems: 'flex-end' }}>
+          <div className={styles.col1}>
             <Select 
               id="initialMethodType" 
               name="initialMethodType" 
@@ -70,14 +75,14 @@ export function ContactForm({ dict }: { dict: Dictionary["contacts"] }) {
               <option value="WalletAddress">Wallet</option>
             </Select>
           </div>
-          <div style={{ flex: 2 }}>
+          <div className={styles.col2}>
             <Input 
               id="initialMethodValue" 
               name="initialMethodValue" 
               placeholder={dict.methodValue}
             />
           </div>
-        </Flex>
+        </div>
       </Form>
     </Card>
   );

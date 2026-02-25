@@ -6,6 +6,7 @@ import { useFormAction } from "../../../shared/hooks/useFormAction";
 import { Card, Input, Alert, Form, Select, Flex, RadioGroup } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
+import styles from "./TransactionForm.module.css";
 
 interface Props {
   dict: Dictionary["transactions"];
@@ -46,8 +47,8 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
         submitLabel={dict.submitButton}
         error={state?.isErr ? state.error : null}
       >
-        <Flex gap={4}>
-          <div style={{ flex: 2 }}>
+        <div className={styles.row}>
+          <div className={styles.col2}>
             <Input 
               id="amount"
               name="amount"
@@ -58,13 +59,13 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
               required
             />
           </div>
-          <div style={{ flex: 1 }}>
+          <div className={styles.col1}>
             <Select id="currency" name="currency" label={dict.currencyLabel}>
               <option value="ARS">ARS</option>
               <option value="USD">USD</option>
             </Select>
           </div>
-        </Flex>
+        </div>
 
         <Select 
           id="sourceAccountId" 
@@ -80,9 +81,9 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
           ))}
         </Select>
 
-        <hr style={{ margin: '1rem 0', opacity: 0.1 }} />
+        <hr className={styles.divider} />
 
-        <div style={{ marginBottom: '1rem' }}>
+        <div className={styles.destinationWrapper}>
           <RadioGroup 
             label={dict.destinationLabel}
             name="destinationType"
@@ -166,7 +167,7 @@ export function TransactionForm({ dict, accounts, wallets, contacts }: Props) {
 
         {state?.isOk && (
           <Alert type="success" title={`✅ ${dict.successCardTitle}`}>
-            <pre style={{ margin: 0, fontSize: "0.8em", overflowX: "auto" }}>
+            <pre className={styles.successData}>
               {JSON.stringify(state.value, null, 2)}
             </pre>
           </Alert>
