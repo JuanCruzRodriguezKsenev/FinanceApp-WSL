@@ -19,7 +19,7 @@
 - [x] UI for creating and managing goals with progress bars.
 - [x] Real balance impact: Transactions now deduct from source and add to destination accounts (ACID).
 
-## Phase 4: Wealth Management
-- Assets and Liabilities module.
-- Credit Card management (Closing/Due dates and auto-recurrence).
-- Net Worth dashboard with historical snapshots.
+## Phase 4: Wealth Management [COMPLETED]
+- [x] Assets and Liabilities module.
+- [x] Credit Card management (Closing/Due dates and auto-recurrence structure).
+- [ ] Net Worth dashboard with historical snapshots. (Pending)
