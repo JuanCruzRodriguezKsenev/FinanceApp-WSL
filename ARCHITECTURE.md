@@ -7,11 +7,12 @@ Following the exhaustive technical audit (Feb 2026), these mandates are implemen
 1.  **Result Integrity**: Server Actions **must** return Plain Old JavaScript Objects (POJOs). Classes or methods are prohibited to ensure RSC serialization across the network boundary.
 2.  **Distributed Resilience**: Circuit Breaker state is stored in **Upstash Redis**. Local memory fallback is only allowed for development. This ensures state persistence across Serverless cold starts.
 3.  **Semantic Styling**: Reject Tailwind/Utility-first CSS. Use **CSS Modules** with `composes` and semantic layout components (`Flex`, `Card`, `Container`).
-4.  **Data Privacy (PII)**: All logs must pass through the `shared/lib/logger` redaction layer. CBUs, CVUs, and passwords must never reach the console.
-5.  **Validation Strategy**: Use **Zod** exclusively. No custom regex-based validators for standard fields.
-6.  **I18n Strategy**: Use Server-Side dictionaries with dynamic routing `/[lang]`. Zero client bundle bloat for translations.
-7.  **React 19 Native**: Leverage `useActionState` and `useFormStatus` to handle asynchronous states natively.
-8.  **ACID Compliance**: All multi-step data operations (Transfers, Reserves) **must** use database transactions via `db.transaction()` to ensure atomicity and consistency.
+4.  **Strict Responsive Units**: Hardcoded pixels (`px`) for layout (width, height, padding, margins) are strictly **forbidden**. You must use responsive units (`rem`, `em`, `%`, `vw`, `vh`). `px` is only allowed for 1px borders or micro-adjustments where absolute precision is mathematically required.
+5.  **Data Privacy (PII)**: All logs must pass through the `shared/lib/logger` redaction layer. CBUs, CVUs, and passwords must never reach the console.
+6.  **Validation Strategy**: Use **Zod** exclusively. No custom regex-based validators for standard fields.
+7.  **I18n Strategy**: Use Server-Side dictionaries with dynamic routing `/[lang]`. Zero client bundle bloat for translations.
+8.  **React 19 Native**: Leverage `useActionState` and `useFormStatus` to handle asynchronous states natively.
+9.  **ACID Compliance**: All multi-step data operations (Transfers, Reserves) **must** use database transactions via `db.transaction()` to ensure atomicity and consistency.
 
 ---
 

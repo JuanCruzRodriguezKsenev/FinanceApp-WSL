@@ -20,12 +20,13 @@ export default function FormField({
   required,
   error,
   errorId,
-  className = "",
+  className,
   children,
 }: FormFieldProps) {
   return (
-    <div className={`${styles.group} ${className}`}>
+    <div className={className ? `${styles.group} ${className}` : styles.group}>
       {label && (
+
         <label className={styles.label} htmlFor={labelFor ?? id}>
           {label}
           {required && <span className={styles.required}> *</span>}
