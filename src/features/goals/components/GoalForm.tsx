@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { createGoal } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Card, Input, Form, Select, Flex } from "../../../shared/ui";
+import { Card, Input, Form, Select } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
 import styles from "./GoalForm.module.css";

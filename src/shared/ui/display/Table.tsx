@@ -16,6 +16,7 @@ interface Props<T> {
   data: T[];
   columns: Column<T>[];
   renderRow?: (item: T) => ReactNode;
+  rowActions?: (item: T) => ReactNode;
   emptyMessage?: string;
   striped?: boolean;
   hoverable?: boolean;
@@ -26,6 +27,7 @@ export default function Table<T extends { id?: string | number }>({
   data,
   columns,
   renderRow,
+  rowActions,
   emptyMessage = "No hay datos",
   striped = true,
   hoverable = true,
@@ -57,6 +59,11 @@ export default function Table<T extends { id?: string | number }>({
                 {column.label}
               </TableHeader>
             ))}
+            {rowActions && (
+              <TableHeader align="right" width="100px">
+                Acciones
+              </TableHeader>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -78,6 +85,11 @@ export default function Table<T extends { id?: string | number }>({
                         : String(item[column.key])}
                     </TableCell>
                   ))}
+                  {rowActions && (
+                    <TableCell align="right">
+                      {rowActions(item)}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
         </tbody>

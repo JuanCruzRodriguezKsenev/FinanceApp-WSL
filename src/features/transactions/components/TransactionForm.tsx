@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createTransaction } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Card, Input, Alert, Form, Select, Flex, RadioGroup } from "../../../shared/ui";
+import { Card, Input, Alert, Form, Select, RadioGroup } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
 import styles from "./TransactionForm.module.css";

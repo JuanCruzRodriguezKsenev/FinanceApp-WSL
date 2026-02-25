@@ -67,6 +67,13 @@
     "es": "Español",
     "en": "English"
   },
+  "sidebar": {
+    "dashboard": "Resumen",
+    "transactions": "Transacciones",
+    "accounts": "Cuentas y Metas",
+    "wealth": "Patrimonio",
+    "contacts": "Contactos"
+  },
   "contacts": {
     "title": "Contactos",
     "addTitle": "Nuevo Contacto",

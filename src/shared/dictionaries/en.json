@@ -67,6 +67,13 @@
     "es": "Español",
     "en": "English"
   },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "transactions": "Transactions",
+    "accounts": "Accounts & Goals",
+    "wealth": "Wealth",
+    "contacts": "Contacts"
+  },
   "contacts": {
     "title": "Contacts",
     "addTitle": "New Contact",

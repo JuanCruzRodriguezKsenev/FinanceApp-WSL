@@ -10,7 +10,6 @@ export { default as RadioGroup } from "./forms/RadioGroup";
 export { default as Form } from "./forms/Form";
 
 export { default as Card } from "./layout/Card";
-export { Flex } from "./layout/Flex";
 export { Container } from "./layout/Container";
 export * from "./layout/Navbar";
 

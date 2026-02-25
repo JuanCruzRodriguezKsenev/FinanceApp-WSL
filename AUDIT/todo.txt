@@ -17,6 +17,8 @@
 - [x] Refactorizar `createTransaction` action para consumir el DAL en lugar de llamar a `db` directamente (manteniendo la transacción ACID).
 - [ ] Extender DAL al resto de entidades (`bank-accounts`, `digital-wallets`, `contacts`, `goals`).
 
-[UPCOMING FEATURES - POST AUDIT]
-- [ ] Instalar Auth.js v5 e implementar protección de identidades en `src/proxy.ts`.
-- [ ] Continuar con BACKEND_PLAN (Inmuebles, Deudas, Acciones).
+[PHASE 5 - UX & LAYOUT REFACTOR]
+- [ ] Refactorizar Navbar a Sidebar fijo en Layout.
+- [ ] Dividir `page.tsx` en múltiples rutas: `/transactions`, `/wealth`, `/contacts`, `/accounts`.
+- [ ] Purgar `<Flex>` component y estilos en línea de todas las features.
+- [ ] Mejorar el componente `Table.tsx` para aceptar `rowActions` y `filters`.

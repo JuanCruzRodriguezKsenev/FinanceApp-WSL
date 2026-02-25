@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { addDigitalWallet } from "../actions";
 import { useFormAction } from "../../../shared/hooks/useFormAction";
-import { Card, Input, Alert, Form, Flex, Select } from "../../../shared/ui";
+import { Card, Input, Alert, Form, Select } from "../../../shared/ui";
 import { Dictionary } from "../../../shared/lib/i18n/types";
 import { useToast } from "@/contexts";
 import styles from "./DigitalWalletForm.module.css";

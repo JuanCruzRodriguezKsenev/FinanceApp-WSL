@@ -16,5 +16,8 @@ Pasos específicos y ordenados por prioridad para corregir los hallazgos técnic
 1.  **Idempotencia**: Añadir middleware o lógica a la validación de transacciones que detecte payloads duplicados en ventanas de tiempo de 5 segundos.
 2.  **Auth.js v5**: Implementar esquema de autenticación (Identity Provider) forzando cookies `HttpOnly` y protección en `src/proxy.ts`.
 
-## Fase 4: Nuevas Funcionalidades (A mediano plazo)
-1.  **Motor de Patrimonio (Wealth Management)**: Continuar con el plan previo (`BACKEND_PLAN/`) desarrollando la tabla de Activos (Inmuebles, Acciones).
+## Fase 5: UX & Layout Refactor (Descaotización)
+1.  **Reorganización de Rutas**: Desacoplar el monstruoso `page.tsx` en páginas dedicadas por dominio (`/transactions`, `/wealth`, `/contacts`, `/accounts`). El Home quedará solo como un Dashboard resumen.
+2.  **Sidebar Navigation**: Refactorizar el Navbar problemático (falso sticky) hacia un Sidebar fijo en Desktop y Topbar en móvil.
+3.  **Purga de Componente `<Flex>`**: Eliminar el componente Flex y cualquier rastro de `style={{}}` remanente, moviendo el layouting a CSS Grid/Flex en los `.module.css`.
+4.  **Evolución de Tablas (CRUD UI)**: Actualizar el componente genérico `Table` para soportar `rowActions` (botones de eliminar/editar) y filtrado integrado.

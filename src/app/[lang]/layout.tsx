@@ -26,6 +26,10 @@ export async function generateStaticParams() {
 }
 
 import { ThemeProvider, ToastProvider } from "@/contexts";
+import { Sidebar } from "../../shared/components/ui/Sidebar/Sidebar";
+import styles from "./layout.module.css";
+import { getDictionary } from "../../shared/lib/i18n/getDictionary";
+import type { Locale } from "../../shared/lib/i18n/i18n-config";
 
 // Para inyectar el tema correctamente necesitamos leer la cookie que pre-renderiza Next.js
 export default async function RootLayout({
@@ -36,6 +40,7 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }>) {
   const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
   
   // Obtenemos la preferencia del tema para inyección SSR (Zero FOUC)
   const cookieStore = await cookies();
@@ -53,7 +58,12 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider initialTheme={theme.mode as any}>
           <ToastProvider>
-            {children}
+            <div className={styles.mainLayout}>
+              <Sidebar lang={lang} dict={dict.sidebar} />
+              <main className={styles.content}>
+                {children}
+              </main>
+            </div>
           </ToastProvider>
         </ThemeProvider>
       </body>

@@ -1,36 +1,15 @@
-import { Suspense } from "react";
-import { getDictionary } from "../../shared/lib/i18n/getDictionary";
-import type { Locale } from "../../shared/lib/i18n/i18n-config";
-import { ThemeToggle } from "../../shared/components/ui/ThemeToggle";
-import { TransactionForm } from "../../features/transactions/components/TransactionForm";
-import { TransactionList } from "../../features/transactions/components/TransactionList";
-import { BankAccountForm } from "../../features/bank-accounts/components/BankAccountForm";
-import { BankAccountList } from "../../features/bank-accounts/components/BankAccountList";
-import { DigitalWalletForm } from "../../features/digital-wallets/components/DigitalWalletForm";
-import { DigitalWalletList } from "../../features/digital-wallets/components/DigitalWalletList";
-import { ContactForm } from "../../features/contacts/components/ContactForm";
-import { ContactList } from "../../features/contacts/components/ContactList";
-import { AssetForm } from "../../features/wealth/components/AssetForm";
-import { LiabilityForm } from "../../features/wealth/components/LiabilityForm";
-import { CreditCardForm } from "../../features/wealth/components/CreditCardForm";
-import { WealthList } from "../../features/wealth/components/WealthList";
-import { GoalForm } from "../../features/goals/components/GoalForm";
-import { GoalList } from "../../features/goals/components/GoalList";
-import { 
-  Container, 
-  Navbar, 
-  NavbarBrand, 
-  NavbarEnd, 
-  LanguageToggle,
-  Flex
-} from "../../shared/ui";
-import styles from "./page.module.css";
-
+import { getTransactions } from "../../features/transactions/actions";
 import { getBankAccounts } from "../../features/bank-accounts/actions";
 import { getDigitalWallets } from "../../features/digital-wallets/actions";
-import { getContacts } from "../../features/contacts/actions";
+import { getWealthData } from "../../features/wealth/actions";
 
-export default async function Home({
+import { Container } from "../../shared/ui";
+import { Dictionary } from "../../shared/lib/i18n/types";
+import { getDictionary } from "../../shared/lib/i18n/getDictionary";
+import type { Locale } from "../../shared/lib/i18n/i18n-config";
+import styles from "./page.module.css";
+
+export default async function DashboardPage({
   params,
 }: {
   params: Promise<{ lang: string }>;
@@ -38,121 +17,52 @@ export default async function Home({
   const { lang } = await params;
   const dict = await getDictionary(lang as Locale);
 
-  // Fetch data for the Smart Transaction Form
-  const [accountsRes, walletsRes, contactsRes] = await Promise.all([
+  // Aquí podemos cargar un resumen ligero. Por ahora solo cálculos básicos.
+  const [accRes, walRes, wealthRes] = await Promise.all([
     getBankAccounts(),
     getDigitalWallets(),
-    getContacts(),
+    getWealthData()
   ]);
 
-  const accounts = accountsRes.isOk ? accountsRes.value : [];
-  const wallets = walletsRes.isOk ? walletsRes.value : [];
-  const contacts = contactsRes.isOk ? contactsRes.value : [];
+  const bankTotal = accRes.isOk ? accRes.value.reduce((acc: number, curr: any) => acc + Number(curr.balance), 0) : 0;
+  const walletTotal = walRes.isOk ? walRes.value.reduce((acc: number, curr: any) => acc + Number(curr.balance), 0) : 0;
+  const liquidTotal = bankTotal + walletTotal;
+
+  let assetsTotal = 0;
+  let debtsTotal = 0;
+
+  if (wealthRes.isOk) {
+    assetsTotal = wealthRes.value.assets.reduce((acc: number, curr: any) => acc + Number(curr.value), 0);
+    debtsTotal = wealthRes.value.liabilities.reduce((acc: number, curr: any) => acc + Number(curr.amount), 0);
+  }
+
+  const netWorth = liquidTotal + assetsTotal - debtsTotal;
 
   return (
-    <>
-      <Navbar sticky shadow padding="medium">
-        <NavbarBrand>
-          <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-            FinanceApp
-          </span>
-        </NavbarBrand>
-        <NavbarEnd gap="small">
-          <ThemeToggle variant="icon" />
-          <LanguageToggle currentLocale={lang} />
-        </NavbarEnd>
-      </Navbar>
+    <Container>
+      <header className={styles.header}>
+        <h1 className={styles.title}>{dict.sidebar.dashboard}</h1>
+        <p className={styles.subtitle}>Resumen Financiero</p>
+      </header>
 
-      <Container className={styles.mainContainer}>
-        <header className={styles.header}>
-          <h1 className={styles.title}>{dict.transactions.title}</h1>
-          <p className={styles.subtitle}>{dict.transactions.subtitle}</p>
-        </header>
+      <div className={styles.grid}>
+        <div className={styles.statCard}>
+          <h3 className={styles.statLabel}>Patrimonio Neto</h3>
+          <p className={styles.statValue}>${netWorth.toLocaleString()}</p>
+        </div>
+        
+        <div className={styles.statCard}>
+          <h3 className={styles.statLabel}>Liquidez (Bancos + Billeteras)</h3>
+          <p className={styles.statValue}>${liquidTotal.toLocaleString()}</p>
+        </div>
 
-        <Flex direction="column" gap={8}>
-          {/* SECCIÓN TRANSACCIONES */}
-          <section className={styles.section}>
-            <div className={styles.grid}>
-              <div>
-                <h2 className={styles.sectionTitle}>{dict.transactions.submitButton}</h2>
-                <TransactionForm 
-                  dict={dict.transactions} 
-                  accounts={accounts}
-                  wallets={wallets}
-                  contacts={contacts}
-                />
-              </div>
-              <div>
-                <h2 className={styles.sectionTitle}>{dict.transactions.tableDate}s</h2>
-                <Suspense fallback={<p>Cargando transacciones...</p>}>
-                  <TransactionList dict={dict.transactions} />
-                </Suspense>
-              </div>
-            </div>
-          </section>
-
-          <div className={styles.grid}>
-            {/* SECCIÓN CUENTAS */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>{dict.bankAccounts.title}</h2>
-              <BankAccountForm dict={dict.bankAccounts} />
-              <div style={{ marginTop: "1rem" }}>
-                <Suspense fallback={<p>Cargando cuentas...</p>}>
-                  <BankAccountList dict={dict.bankAccounts} />
-                </Suspense>
-              </div>
-            </section>
-
-            {/* SECCIÓN BILLETERAS */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>{dict.digitalWallets.title}</h2>
-              <DigitalWalletForm dict={dict.digitalWallets} />
-              <div style={{ marginTop: "1rem" }}>
-                <Suspense fallback={<p>Cargando billeteras...</p>}>
-                  <DigitalWalletList dict={dict.digitalWallets} />
-                </Suspense>
-              </div>
-            </section>
-
-            {/* SECCIÓN CONTACTOS */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>{dict.contacts.title}</h2>
-              <ContactForm dict={dict.contacts} />
-              <div style={{ marginTop: "1rem" }}>
-                <Suspense fallback={<p>Cargando contactos...</p>}>
-                  <ContactList dict={dict.contacts} />
-                </Suspense>
-              </div>
-            </section>
-
-            {/* SECCIÓN GOALS */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>{dict.goals.title}</h2>
-              <GoalForm dict={dict.goals} accounts={accounts} wallets={wallets} />
-              <div style={{ marginTop: "1rem" }}>
-                <Suspense fallback={<p>Cargando objetivos...</p>}>
-                  <GoalList dict={dict.goals} />
-                </Suspense>
-              </div>
-            </section>
-            
-            {/* SECCIÓN WEALTH */}
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>{dict.wealth.title}</h2>
-              <Flex gap={4} direction="column">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-                  <AssetForm dict={dict.wealth} />
-                  <LiabilityForm dict={dict.wealth} />
-                  <CreditCardForm dict={dict.wealth} />
-                </div>
-                <Suspense fallback={<p>Cargando patrimonio...</p>}>
-                  <WealthList dict={dict.wealth} />
-                </Suspense>
-              </Flex>
-            </section>
-          </div>
-        </Flex>
-      </Container>
-    </>
+        <div className={styles.statCard}>
+          <h3 className={styles.statLabel}>Deudas</h3>
+          <p className={styles.statValueNegative}>
+            -${debtsTotal.toLocaleString()}
+          </p>
+        </div>
+      </div>
+    </Container>
   );
 }
