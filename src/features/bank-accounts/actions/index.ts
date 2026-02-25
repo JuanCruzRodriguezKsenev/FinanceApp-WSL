@@ -9,33 +9,19 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { getDictionary } from "../../../shared/lib/i18n/getDictionary";
 import type { Locale } from "../../../shared/lib/i18n/i18n-config";
-import { db } from "../../../shared/lib/db";
-import { bankAccounts } from "../schema.db";
-import { desc, sql, eq } from "drizzle-orm";
-import { financialTargets } from "../../goals/schema.db";
+import { bankAccountRepository } from "../data/repository";
 
 const dbBreaker = CircuitBreakerFactory.database("bank-accounts-db");
 
 export async function getBankAccounts(): Promise<Result<any[]>> {
   try {
     const result = await dbBreaker.execute(async () => {
-      // Obtenemos cuentas con el total de sus reservas vinculadas
-      return await db.select({
-        id: bankAccounts.id,
-        cbu: bankAccounts.cbu,
-        alias: bankAccounts.alias,
-        bankName: bankAccounts.bankName,
-        balance: bankAccounts.balance,
-        currency: bankAccounts.currency,
-        locked: sql<string>`(SELECT COALESCE(SUM(${financialTargets.currentAmount}), 0) FROM ${financialTargets} WHERE ${financialTargets.bankAccountId} = ${bankAccounts.id})`
-      })
-      .from(bankAccounts)
-      .where(eq(bankAccounts.isActive, true))
-      .orderBy(desc(bankAccounts.createdAt));
+      return await bankAccountRepository.findAllWithLockedBalance();
     });
     return ok(result);
   } catch (error: any) {
-    logger.error({ msg: "FETCH_BANK_ACCOUNTS_ERROR", error: error.message }, "Error fetching bank accounts");
+    console.error("DEBUG: Bank Account Fetch Error Object:");
+    console.dir(error, { depth: null });
     return err(internalError("Error fetching bank accounts", { details: error.message }));
   }
 }
@@ -57,16 +43,7 @@ export async function addBankAccount(input: unknown): Promise<Result<any>> {
 
   try {
     const result = await dbBreaker.execute(async () => {
-      // Dejamos que la DB genere el ID para mayor compatibilidad con defaults
-      const [inserted] = await db.insert(bankAccounts).values({
-        cbu: validData.cbu,
-        alias: validData.alias,
-        bankName: validData.bankName,
-        balance: validData.balance.toString(),
-        currency: validData.currency,
-      }).returning();
-      
-      return inserted;
+      return await bankAccountRepository.create(validData);
     });
     
     revalidatePath("/[lang]", "layout");

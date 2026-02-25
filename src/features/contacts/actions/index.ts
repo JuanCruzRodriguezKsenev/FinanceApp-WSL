@@ -21,19 +21,31 @@ const dbBreaker = CircuitBreakerFactory.database("contacts-db");
 export async function getContacts(): Promise<Result<any[]>> {
   try {
     const result = await dbBreaker.execute(async () => {
-      return await db.query.contacts.findMany({
-        where: eq(contacts.isActive, true),
-        with: {
-          methods: {
-            where: eq(contactMethods.isActive, true)
-          }
-        },
-        orderBy: [desc(contacts.lastUsedAt), desc(contacts.createdAt)]
-      });
+      // Intentamos una query más simple si la relacional falla
+      try {
+        return await db.query.contacts.findMany({
+          where: eq(contacts.isActive, true),
+          with: {
+            methods: {
+              where: eq(contactMethods.isActive, true)
+            }
+          },
+          orderBy: [desc(contacts.lastUsedAt), desc(contacts.createdAt)]
+        });
+      } catch (innerError: any) {
+        console.error("DEBUG: Relational Query Failed, falling back to simple select");
+        return await db.select().from(contacts).where(eq(contacts.isActive, true)).execute();
+      }
     });
     return ok(result);
   } catch (error: any) {
-    logger.error({ msg: "FETCH_CONTACTS_ERROR", error: error.message }, "Error fetching contacts");
+    console.error(">>> ERROR FETCHING CONTACTS <<<");
+    console.error("Message:", error.message);
+    console.error("Stack:", error.stack);
+    if (error.cause) {
+      console.error("Cause Message:", error.cause.message);
+      console.error("Cause Code:", error.cause.code);
+    }
     return err(internalError("Error fetching contacts", { details: error.message }));
   }
 }
